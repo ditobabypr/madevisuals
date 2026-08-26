@@ -5,47 +5,45 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
+  background: #000000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.page-overlay--active {
+  opacity: 1;
   pointer-events: auto;
-}
-
-.page-overlay--covering {
-  animation: overlay-fade-in 420ms var(--ease) forwards;
-}
-
-.page-overlay--revealing {
-  animation: overlay-fade-out 420ms var(--ease) forwards;
 }
 
 .page-overlay__logo {
   position: relative;
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 220ms ease, transform 220ms ease;
 }
 
-.page-overlay--covering .page-overlay__logo {
-  animation: logo-in 420ms var(--ease-soft) forwards;
+.page-overlay--active .page-overlay__logo {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.page-overlay--revealing .page-overlay__logo {
-  animation: logo-out 380ms var(--ease) forwards;
+/* Crop window sized/positioned from the measured bounding box of the eye
+   mark inside the 1080x1920 source clip (~40% padding around it). Keep the
+   aspect-ratio and the video's offset/width percentages in sync if the
+   source clip ever changes. */
+.page-overlay__crop {
+  position: relative;
+  overflow: hidden;
+  height: clamp(120px, 18vw, 180px);
+  width: clamp(230px, 34.5vw, 345px);
 }
 
-@keyframes overlay-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes overlay-fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-@keyframes logo-in {
-  0% { opacity: 0; transform: scale(0.85) translateY(8px); }
-  60% { opacity: 1; }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-@keyframes logo-out {
-  0% { opacity: 1; transform: scale(1) translateY(0); }
-  100% { opacity: 0; transform: scale(1.08) translateY(-6px); }
+.page-overlay__video {
+  position: absolute;
+  top: -561%;
+  left: -129%;
+  width: 359%;
+  max-width: none;
+  height: auto;
 }

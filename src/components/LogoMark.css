@@ -1,0 +1,6 @@
+.logo-mark {
+  height: clamp(64px, 10vw, 120px);
+  width: auto;
+  object-fit: contain;
+  display: block;
+}

@@ -3,18 +3,21 @@ import Reveal from '../components/Reveal'
 import MediaCard from '../components/MediaCard'
 import './Projects.css'
 
-const FILTERS = ['Todos', 'Viajes', 'Bodas', 'Discotecas', 'Afterparties']
+const FILTERS = ['Todos', 'Viajes', 'Bodas', 'Discotecas', 'Afterparties', 'Eventos']
 
 const PROJECTS = [
   { category: 'Viajes', title: 'Sudeste Asiático', label: '[ VIAJES — SUDESTE ASIÁTICO ]', type: 'video', ratio: '4 / 5', size: 'tall' },
   { category: 'Bodas', title: 'Laura & Marc', label: '[ BODA — LAURA & MARC ]', type: 'photo', ratio: '4 / 3', size: 'wide' },
   { category: 'Discotecas', title: 'Noche Blanca Club', label: '[ DISCOTECA — NOCHE BLANCA ]', type: 'video', ratio: '1 / 1', size: '' },
   { category: 'Afterparties', title: 'After Costa Sur', label: '[ AFTERPARTY — COSTA SUR ]', type: 'photo', ratio: '4 / 5', size: 'tall' },
+  { category: 'Eventos', title: 'Festival Costa Sur', label: '[ EVENTO — FESTIVAL COSTA SUR ]', type: 'video', ratio: '4 / 3', size: 'wide', meta: '2025' },
   { category: 'Viajes', title: 'Islas Griegas', label: '[ VIAJES — ISLAS GRIEGAS ]', type: 'photo', ratio: '4 / 3', size: 'wide' },
   { category: 'Bodas', title: 'Elena & Jon', label: '[ BODA — ELENA & JON ]', type: 'video', ratio: '4 / 5', size: 'tall' },
   { category: 'Discotecas', title: 'Pacha Rooftop', label: '[ DISCOTECA — PACHA ROOFTOP ]', type: 'photo', ratio: '1 / 1', size: '' },
+  { category: 'Eventos', title: 'Sesión Privada Rooftop', label: '[ EVENTO — SESIÓN ROOFTOP ]', type: 'photo', ratio: '4 / 5', size: 'tall', meta: '2024' },
   { category: 'Afterparties', title: 'Sunrise Session', label: '[ AFTERPARTY — SUNRISE SESSION ]', type: 'video', ratio: '4 / 3', size: 'wide' },
   { category: 'Viajes', title: 'Marruecos', label: '[ VIAJES — MARRUECOS ]', type: 'photo', ratio: '4 / 5', size: 'tall' },
+  { category: 'Eventos', title: 'Apertura Club Aurora', label: '[ EVENTO — CLUB AURORA ]', type: 'photo', ratio: '1 / 1', size: '', meta: '2023' },
   { category: 'Bodas', title: 'Rooftop Vows', label: '[ BODA — ROOFTOP VOWS ]', type: 'photo', ratio: '4 / 3', size: 'wide' },
 ]
 
@@ -31,9 +34,9 @@ export default function Projects() {
       <div className="container">
         <Reveal className="section-head">
           <p className="kicker">Portfolio</p>
-          <h1 className="page-title">Proyectos</h1>
+          <h1 className="page-title">Work</h1>
           <p className="section-lede">
-            Cuatro áreas de trabajo, un mismo enfoque: contar la historia real
+            Cinco áreas de trabajo, un mismo enfoque: contar la historia real
             de cada momento con una estética limpia y cinematográfica.
           </p>
         </Reveal>
@@ -54,12 +57,17 @@ export default function Projects() {
 
         <div className="projects__grid">
           {visible.map((p) => (
-            <Reveal as="div" key={p.title} className={`projects__item ${p.size ? `media-card--${p.size}` : ''}`}>
+            <Reveal
+              as="div"
+              key={`${p.category}-${p.title}`}
+              className={`projects__item ${p.size ? `media-card--${p.size}` : ''}`}
+            >
               <MediaCard
                 label={p.label}
                 ratio={p.ratio}
                 type={p.type}
                 tag={p.category}
+                meta={p.meta}
                 title={p.title}
                 cta="Ver proyecto"
               />

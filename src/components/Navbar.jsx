@@ -5,11 +5,10 @@ import TransitionLink from '../transitions/TransitionLink'
 import './Navbar.css'
 
 const LINKS = [
-  { to: '/', label: 'Inicio' },
-  { to: '/proyectos', label: 'Proyectos' },
-  { to: '/eventos', label: 'Eventos' },
-  { to: '/sobre-mi', label: 'Sobre mí' },
-  { to: '/contacto', label: 'Contacto' },
+  { to: '/', label: 'Home' },
+  { to: '/proyectos', label: 'Work' },
+  { to: '/sobre-mi', label: 'About me' },
+  { to: '/contacto', label: 'Contact' },
 ]
 
 export default function Navbar() {

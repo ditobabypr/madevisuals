@@ -34,6 +34,7 @@
   text-transform: uppercase;
   color: var(--accent);
   border: 1px solid var(--accent-line);
+  border-radius: var(--radius-pill);
   padding: 0.4rem 0.85rem;
 }
 

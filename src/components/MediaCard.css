@@ -16,6 +16,7 @@
 .media-card__frame {
   position: relative;
   overflow: hidden;
+  border-radius: var(--radius-lg);
   flex: 1;
   cursor: pointer;
 }

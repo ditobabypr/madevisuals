@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import BrandLogo from './BrandLogo'
+import LogoMark from './LogoMark'
 import './IntroLoader.css'
 
 const HOLD_MS = 1150
@@ -29,7 +29,7 @@ export default function IntroLoader({ onDone }) {
     <div className={`intro-loader ${exiting ? 'intro-loader--exit' : ''}`} aria-hidden="true">
       <div className="grain" />
       <div className="intro-loader__logo">
-        <BrandLogo size="lg" />
+        <LogoMark />
       </div>
     </div>
   )

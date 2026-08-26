@@ -13,6 +13,7 @@
     ),
     linear-gradient(155deg, #19191c 0%, #0d0d0e 65%, #0a0a0b 100%);
   border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -22,48 +23,6 @@
 
 .media-placeholder:hover {
   border-color: var(--border-soft);
-}
-
-.media-placeholder__corner {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 1px solid var(--accent-line);
-  opacity: 0.7;
-  transition: width 0.4s var(--ease), height 0.4s var(--ease);
-}
-
-.media-placeholder__corner--tl {
-  top: 14px;
-  left: 14px;
-  border-right: none;
-  border-bottom: none;
-}
-
-.media-placeholder__corner--tr {
-  top: 14px;
-  right: 14px;
-  border-left: none;
-  border-bottom: none;
-}
-
-.media-placeholder__corner--bl {
-  bottom: 14px;
-  left: 14px;
-  border-right: none;
-  border-top: none;
-}
-
-.media-placeholder__corner--br {
-  bottom: 14px;
-  right: 14px;
-  border-left: none;
-  border-top: none;
-}
-
-.media-placeholder:hover .media-placeholder__corner {
-  width: 24px;
-  height: 24px;
 }
 
 .media-placeholder__content {

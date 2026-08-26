@@ -4,16 +4,6 @@
   left: 0;
   width: 100%;
   z-index: 100;
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  transition: background 0.5s var(--ease), border-color 0.5s var(--ease), height 0.4s var(--ease);
-}
-
-.navbar--scrolled {
-  background: rgba(10, 10, 11, 0.8);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border-soft);
 }
 
 .navbar__inner {
@@ -21,21 +11,55 @@
   align-items: center;
   justify-content: space-between;
   height: var(--nav-height);
-  transition: height 0.4s var(--ease);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
+  transition:
+    max-width 0.55s var(--ease),
+    height 0.55s var(--ease),
+    margin-top 0.55s var(--ease),
+    padding 0.55s var(--ease),
+    background-color 0.55s var(--ease),
+    border-color 0.55s var(--ease),
+    box-shadow 0.55s var(--ease),
+    backdrop-filter 0.55s var(--ease);
 }
 
 .navbar--scrolled .navbar__inner {
+  max-width: 760px;
   height: var(--nav-height-scrolled);
+  margin-top: 14px;
+  padding: 0 0.6rem 0 1.4rem;
+  background: rgba(14, 14, 16, 0.68);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
 }
 
 .navbar__brand {
   display: inline-flex;
+  flex: none;
+}
+
+.navbar--scrolled .brand-logo {
+  height: 30px;
 }
 
 .navbar__links {
   display: flex;
   align-items: center;
   gap: clamp(1.4rem, 2.4vw, 2.6rem);
+  transition: gap 0.55s var(--ease);
+}
+
+.navbar--scrolled .navbar__links {
+  gap: clamp(1rem, 1.6vw, 1.6rem);
 }
 
 .navbar__link {
@@ -64,7 +88,7 @@
 }
 
 .navbar--scrolled .navbar__link::after {
-  bottom: -14px;
+  bottom: -12px;
 }
 
 .navbar__link:hover {
@@ -88,6 +112,7 @@
   height: 34px;
   background: none;
   border: none;
+  border-radius: var(--radius-pill);
   z-index: 110;
 }
 
@@ -179,5 +204,8 @@
   }
   .navbar__toggle {
     display: flex;
+  }
+  .navbar--scrolled .navbar__inner {
+    max-width: calc(100% - 2rem);
   }
 }

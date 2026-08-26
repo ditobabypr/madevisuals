@@ -31,6 +31,12 @@
   --nav-height: 82px;
   --nav-height-scrolled: 64px;
 
+  --radius-sm: 16px;
+  --radius-md: 24px;
+  --radius-lg: 32px;
+  --radius-xl: 40px;
+  --radius-pill: 999px;
+
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -193,6 +199,7 @@ ul, ol {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   border: 1px solid var(--text);
+  border-radius: var(--radius-pill);
   color: var(--text);
   background: transparent;
   padding: 1rem 1.9rem;

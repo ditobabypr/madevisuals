@@ -23,11 +23,6 @@ export default function Placeholder({
 }) {
   return (
     <div className={`media-placeholder ${className}`.trim()} style={{ '--ratio': ratio }}>
-      <span className="media-placeholder__corner media-placeholder__corner--tl" />
-      <span className="media-placeholder__corner media-placeholder__corner--tr" />
-      <span className="media-placeholder__corner media-placeholder__corner--bl" />
-      <span className="media-placeholder__corner media-placeholder__corner--br" />
-
       <div className="media-placeholder__content">
         <span className="media-placeholder__icon" aria-hidden="true">
           {type === 'video' ? <PlayIcon /> : <CameraIcon />}

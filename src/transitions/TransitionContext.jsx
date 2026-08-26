@@ -5,8 +5,8 @@ import PageTransitionOverlay from './PageTransitionOverlay'
 // Single place that owns the "cover -> navigate -> reveal" choreography used
 // for every in-app navigation. Tune COVER_MS / REVEAL_MS to change the feel
 // of every page transition on the site at once.
-export const COVER_MS = 420
-export const REVEAL_MS = 420
+export const COVER_MS = 500
+export const REVEAL_MS = 320
 
 const TransitionContext = createContext(null)
 
