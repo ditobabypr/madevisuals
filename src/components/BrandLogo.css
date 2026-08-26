@@ -1,0 +1,33 @@
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.brand-logo--sm {
+  font-size: 1.05rem;
+}
+
+.brand-logo--md {
+  font-size: 1.3rem;
+}
+
+.brand-logo--lg {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+}
+
+.brand-logo--placeholder-lg {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: clamp(1.1rem, 2.6vw, 1.6rem);
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+img.brand-logo {
+  height: 1.6em;
+  width: auto;
+}

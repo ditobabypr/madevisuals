@@ -1,0 +1,86 @@
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import BrandLogo from './BrandLogo'
+import TransitionLink from '../transitions/TransitionLink'
+import './Navbar.css'
+
+const LINKS = [
+  { to: '/', label: 'Inicio' },
+  { to: '/proyectos', label: 'Proyectos' },
+  { to: '/eventos', label: 'Eventos' },
+  { to: '/sobre-mi', label: 'Sobre mí' },
+  { to: '/contacto', label: 'Contacto' },
+]
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+  }, [menuOpen])
+
+  return (
+    <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
+      <div className="navbar__inner container">
+        <TransitionLink to="/" className="navbar__brand">
+          <BrandLogo />
+        </TransitionLink>
+
+        <nav className="navbar__links" aria-label="Navegación principal">
+          {LINKS.map((link) => (
+            <TransitionLink
+              key={link.to}
+              to={link.to}
+              className={`navbar__link ${location.pathname === link.to ? 'navbar__link--active' : ''}`}
+            >
+              {link.label}
+            </TransitionLink>
+          ))}
+        </nav>
+
+        <button
+          className={`navbar__toggle ${menuOpen ? 'navbar__toggle--open' : ''}`}
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
+
+      <div className={`navbar__mobile ${menuOpen ? 'navbar__mobile--open' : ''}`}>
+        {LINKS.map((link, i) => (
+          <TransitionLink
+            key={link.to}
+            to={link.to}
+            className={`navbar__mobile-link ${location.pathname === link.to ? 'navbar__link--active' : ''}`}
+            style={{ transitionDelay: `${menuOpen ? i * 60 + 80 : 0}ms` }}
+          >
+            <span className="navbar__mobile-index">{String(i + 1).padStart(2, '0')}</span>
+            {link.label}
+          </TransitionLink>
+        ))}
+
+        <div className="navbar__mobile-footer">
+          <span>@madevisuals</span>
+          <span>hola@madevisuals.com</span>
+        </div>
+      </div>
+    </header>
+  )
+}

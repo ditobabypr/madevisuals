@@ -1,0 +1,44 @@
+.intro-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  animation: intro-fade-in 200ms var(--ease) forwards;
+}
+
+.intro-loader--exit {
+  animation: intro-fade-out 500ms var(--ease) forwards;
+}
+
+.intro-loader__logo {
+  position: relative;
+  animation: intro-logo-in 700ms var(--ease-soft) forwards;
+}
+
+.intro-loader--exit .intro-loader__logo {
+  animation: intro-logo-out 480ms var(--ease) forwards;
+}
+
+@keyframes intro-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes intro-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes intro-logo-in {
+  0% { opacity: 0; transform: scale(0.8) translateY(12px); }
+  70% { opacity: 1; }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes intro-logo-out {
+  0% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(1.1) translateY(-10px); }
+}
