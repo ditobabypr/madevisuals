@@ -5,7 +5,7 @@
   overflow: hidden;
   display: flex;
   align-items: flex-end;
-  min-height: clamp(340px, 44vw, 500px);
+  min-height: clamp(300px, 38vw, 430px);
   background: var(--bg);
 }
 
@@ -40,7 +40,7 @@
 .projects__title {
   position: relative;
   margin-top: 0;
-  font-size: clamp(5rem, 15vw, 13rem);
+  font-size: clamp(4.3rem, 13vw, 11rem);
 }
 
 .projects__title::after {
@@ -86,43 +86,63 @@
   }
 }
 
-/* ---------- dense wall of images — tight gaps, Ventour-style ---------- */
+/* ---------- rows of 2, zigzagging wide/narrow side each row ---------- */
 
 .projects__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 620px;
-  grid-auto-flow: dense;
-  gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   padding-top: clamp(2rem, 4vw, 3rem);
   padding-bottom: var(--section-padding-y);
 }
 
+.projects__row {
+  display: flex;
+  gap: 12px;
+  /* Each row is a single track now (no more 2-row tall spans), so this can
+     be tall enough for the horizontal/vertical tiles to read as their
+     actual format — clamped so it still can't overshoot short viewports. */
+  height: clamp(420px, 58vh, 660px);
+}
+
 .projects__cell {
+  height: 100%;
   min-height: 0;
   min-width: 0;
 }
 
+/* Each cell's own format drives its width — a lone leftover cell (odd
+   item count) has nothing to share the row with, so it fills it. */
+.projects__cell--horizontal {
+  flex: 2.2 1 0%;
+}
+
+.projects__cell--vertical {
+  flex: 1 1 0%;
+}
+
 @media (max-width: 980px) {
-  .projects__grid {
-    grid-auto-rows: 440px;
+  .projects__row {
+    height: clamp(320px, 52vh, 480px);
   }
 }
 
 @media (max-width: 620px) {
-  .projects__grid {
-    grid-template-columns: 1fr;
-    grid-auto-rows: auto;
-    gap: 6px;
+  .projects__row {
+    flex-direction: column;
+    height: auto;
   }
 
-  .projects__cell.project-tile--tall,
-  .projects__cell.project-tile--wide {
-    grid-row: auto;
-    grid-column: auto;
+  .projects__cell {
+    height: auto;
   }
 
-  .projects__cell .project-tile {
+  .projects__cell--horizontal .project-tile {
+    aspect-ratio: 3 / 2;
+    height: auto;
+  }
+
+  .projects__cell--vertical .project-tile {
     aspect-ratio: 4 / 5;
     height: auto;
   }

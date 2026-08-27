@@ -69,11 +69,3 @@
 .project-tile__dot {
   color: var(--accent);
 }
-
-.project-tile--tall {
-  grid-row: span 2;
-}
-
-.project-tile--wide {
-  grid-column: span 2;
-}
