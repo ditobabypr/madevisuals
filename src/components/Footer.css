@@ -19,7 +19,8 @@
 }
 
 .footer__copy {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
+  font-weight: 400;
   font-size: 0.75rem;
   color: var(--text-dim);
 }
@@ -30,10 +31,10 @@
 }
 
 .footer__socials a {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-muted);
   transition: color 0.3s var(--ease);
@@ -50,10 +51,10 @@
   background: none;
   border: none;
   color: var(--text-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: color 0.3s var(--ease);
 }

@@ -1,0 +1,117 @@
+/* ---------- Home hero — bottom filmstrip, TOPO-style ---------- */
+
+.home-filmstrip {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  padding: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(8, 8, 9, 0.5) 40%, rgba(8, 8, 9, 0.82) 100%);
+}
+
+.home-filmstrip__track {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding-top: 30px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.home-filmstrip__track::-webkit-scrollbar {
+  display: none;
+}
+
+.home-filmstrip__item {
+  position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  transition: flex-grow 0.42s var(--ease);
+}
+
+.home-filmstrip__item--active {
+  flex-grow: 6;
+}
+
+.home-filmstrip__title {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  white-space: nowrap;
+  transform: translate(-50%, 6px);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  pointer-events: none;
+}
+
+.home-filmstrip__item--active .home-filmstrip__title {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.home-filmstrip__thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: clamp(64px, 11vw, 150px);
+  border-radius: 0;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px,
+      transparent 14px
+    ),
+    linear-gradient(155deg, #1c1c20 0%, #0e0e10 65%, #0a0a0b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: border-color 0.3s var(--ease);
+}
+
+.home-filmstrip__item--active .home-filmstrip__thumb {
+  border-color: var(--accent-line);
+}
+
+.home-filmstrip__play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(245, 244, 240, 0.5);
+}
+
+.home-filmstrip__play svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 620px) {
+  .home-filmstrip__track {
+    overflow-x: auto;
+  }
+
+  .home-filmstrip__item {
+    flex: 0 0 92px;
+  }
+
+  .home-filmstrip__item--active {
+    flex: 0 0 220px;
+  }
+}

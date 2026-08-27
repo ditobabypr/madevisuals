@@ -51,10 +51,10 @@
 }
 
 .media-placeholder__label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
 }

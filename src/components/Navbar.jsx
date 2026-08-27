@@ -38,6 +38,10 @@ export default function Navbar() {
           <BrandLogo />
         </TransitionLink>
 
+        <TransitionLink to="/" className="navbar__center">
+          MADEVISUALS
+        </TransitionLink>
+
         <nav className="navbar__links" aria-label="Navegación principal">
           {LINKS.map((link) => (
             <TransitionLink

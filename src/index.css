@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap');
 
 :root {
   --bg: #0a0a0b;
@@ -12,19 +12,18 @@
   --text-muted: #a7a4a0;
   --text-dim: #68666a;
 
-  --accent: #d7ff3f;
+  --accent: #f2a93c;
   --accent-ink: #0a0a0b;
-  --accent-soft: rgba(215, 255, 63, 0.12);
-  --accent-line: rgba(215, 255, 63, 0.45);
+  --accent-soft: rgba(242, 169, 60, 0.12);
+  --accent-line: rgba(242, 169, 60, 0.45);
 
   --accent-2: #ff3d6e;
   --accent-2-soft: rgba(255, 61, 110, 0.14);
 
-  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
-  --font-body: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
+  --font-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-  --container-width: 1360px;
+  --container-width: 1680px;
   --section-padding-y: clamp(4.5rem, 10vw, 8rem);
   --gutter: clamp(1.25rem, 5vw, 3.5rem);
 
@@ -139,9 +138,9 @@ ul, ol {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.72rem;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--accent);
@@ -156,8 +155,8 @@ ul, ol {
 
 .page-title {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   line-height: 0.88;
   font-size: clamp(3.4rem, 10vw, 7.5rem);
   text-transform: uppercase;
@@ -165,8 +164,8 @@ ul, ol {
 
 .section-title {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   line-height: 0.92;
   font-size: clamp(2.6rem, 6vw, 4.6rem);
   text-transform: uppercase;
@@ -181,7 +180,8 @@ ul, ol {
 }
 
 .eyebrow-number {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
+  font-weight: 500;
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   color: var(--text-dim);
@@ -193,10 +193,10 @@ ul, ol {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   border: 1px solid var(--text);
   border-radius: var(--radius-pill);
@@ -226,10 +226,10 @@ ul, ol {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text);
   position: relative;
@@ -301,8 +301,9 @@ ul, ol {
   align-items: center;
   gap: 1.4rem;
   font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(1.6rem, 3.6vw, 2.6rem);
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--text-dim);
   padding: 0.9rem 1.4rem;
