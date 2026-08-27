@@ -12,10 +12,10 @@
   --text-muted: #a7a4a0;
   --text-dim: #68666a;
 
-  --accent: #f2a93c;
+  --accent: #b5b5bb;
   --accent-ink: #0a0a0b;
-  --accent-soft: rgba(242, 169, 60, 0.12);
-  --accent-line: rgba(242, 169, 60, 0.45);
+  --accent-soft: rgba(181, 181, 187, 0.12);
+  --accent-line: rgba(181, 181, 187, 0.45);
 
   --accent-2: #ff3d6e;
   --accent-2-soft: rgba(255, 61, 110, 0.14);
@@ -299,14 +299,14 @@ ul, ol {
 .marquee__item {
   display: inline-flex;
   align-items: center;
-  gap: 1.4rem;
+  gap: 1rem;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(1.6rem, 3.6vw, 2.6rem);
   letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--text-dim);
-  padding: 0.9rem 1.4rem;
+  padding: 0.9rem 0.9rem;
   white-space: nowrap;
 }
 
@@ -314,10 +314,10 @@ ul, ol {
   content: '\2726';
   font-size: 0.9rem;
   color: var(--accent);
-  margin-left: 1.4rem;
+  margin-left: 1rem;
 }
 
 @keyframes marquee-scroll {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to { transform: translateX(-33.3334%); }
 }

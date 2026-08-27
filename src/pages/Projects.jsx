@@ -1,6 +1,9 @@
 import Reveal from '../components/Reveal'
 import ProjectTile from '../components/ProjectTile'
+import Marquee from '../components/Marquee'
 import './Projects.css'
+
+const CATEGORIES = ['Travel', 'Weddings', 'Nightlife', 'Afterparties', 'Events']
 
 const PROJECTS = [
   { category: 'Travel', title: 'Sudeste Asiático', label: '[ TRAVEL ]', type: 'video', ratio: '4 / 5', year: '2024', size: 'tall' },
@@ -21,16 +24,35 @@ const PROJECTS = [
 export default function Projects() {
   return (
     <div className="page projects">
-      <div className="container">
-        <Reveal className="section-head">
-          <p className="kicker">Portfolio</p>
-          <h1 className="page-title">Work</h1>
-          <p className="section-lede">
-            Una mezcla de proyectos, un mismo enfoque: contar la historia real
-            de cada momento con una estética limpia y cinematográfica.
-          </p>
-        </Reveal>
+      <div className="projects__header">
+        {/* Behind-the-title band — swap by replacing /public/highlights.mp4 */}
+        <video
+          className="projects__header-media"
+          src="/highlights.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="projects__header-overlay" />
 
+        <div className="container projects__header-inner">
+          <Reveal as="div" className="projects__title-block">
+            <h1 className="page-title projects__title">Work</h1>
+          </Reveal>
+
+          <Reveal as="div" delay={100} className="projects__intro">
+            <p className="section-lede">
+              Una mezcla de proyectos, un mismo enfoque: contar la historia real
+              de cada momento con una estética limpia y cinematográfica.
+            </p>
+          </Reveal>
+        </div>
+      </div>
+
+      <Marquee items={CATEGORIES} speed={22} />
+
+      <div className="container">
         <div className="projects__grid">
           {PROJECTS.map((p, i) => (
             <Reveal

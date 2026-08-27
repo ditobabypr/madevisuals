@@ -1,3 +1,91 @@
+/* ---------- header — full-bleed blurred reel behind a big title ---------- */
+
+.projects__header {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(340px, 44vw, 500px);
+  background: var(--bg);
+}
+
+.projects__header-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(7px) brightness(0.4) grayscale(0.25) contrast(1.05);
+  transform: scale(1.1);
+}
+
+.projects__header-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 10, 11, 0.3) 0%, rgba(10, 10, 11, 0.55) 55%, rgba(10, 10, 11, 0.85) 100%);
+}
+
+.projects__header-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2.5rem;
+  width: 100%;
+  padding-top: clamp(1.5rem, 4vw, 2.25rem);
+  padding-bottom: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.projects__title {
+  position: relative;
+  margin-top: 0;
+  font-size: clamp(5rem, 15vw, 13rem);
+}
+
+.projects__title::after {
+  content: '';
+  display: block;
+  margin-top: clamp(1rem, 2.5vw, 1.6rem);
+  height: 2px;
+  width: 72px;
+  background: var(--accent);
+  animation: projects-rule-in 0.9s var(--ease) 0.15s both;
+}
+
+@keyframes projects-rule-in {
+  from { width: 0; opacity: 0; }
+  to { width: 72px; opacity: 1; }
+}
+
+.projects__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1.1rem;
+  max-width: 380px;
+  text-align: right;
+  flex: none;
+}
+
+.projects__intro .section-lede {
+  margin: 0;
+  max-width: none;
+}
+
+@media (max-width: 780px) {
+  .projects__header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .projects__intro {
+    align-items: flex-start;
+    text-align: left;
+    max-width: 100%;
+  }
+}
+
 /* ---------- dense wall of images — tight gaps, Ventour-style ---------- */
 
 .projects__grid {
@@ -6,6 +94,7 @@
   grid-auto-rows: 620px;
   grid-auto-flow: dense;
   gap: 6px;
+  padding-top: clamp(2rem, 4vw, 3rem);
   padding-bottom: var(--section-padding-y);
 }
 
