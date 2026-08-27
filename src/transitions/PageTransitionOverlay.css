@@ -35,8 +35,8 @@
 .page-overlay__crop {
   position: relative;
   overflow: hidden;
-  height: clamp(120px, 18vw, 180px);
-  width: clamp(230px, 34.5vw, 345px);
+  height: clamp(86px, 13vw, 130px);
+  width: clamp(166px, 25vw, 248px);
 }
 
 .page-overlay__video {

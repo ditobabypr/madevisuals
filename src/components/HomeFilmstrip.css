@@ -39,7 +39,7 @@
 }
 
 .home-filmstrip__item--active {
-  flex-grow: 6;
+  flex-grow: 1.25;
 }
 
 .home-filmstrip__title {
@@ -112,6 +112,6 @@
   }
 
   .home-filmstrip__item--active {
-    flex: 0 0 220px;
+    flex: 0 0 110px;
   }
 }

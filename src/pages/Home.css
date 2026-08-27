@@ -50,6 +50,6 @@
   text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 1.05;
-  font-size: clamp(1.7rem, 3.8vw, 3.2rem);
+  font-size: clamp(1.5rem, 3.3vw, 2.75rem);
   color: var(--text);
 }

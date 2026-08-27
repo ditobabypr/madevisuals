@@ -20,8 +20,8 @@ export default function Home() {
         </div>
 
         <div className="hero__statement">
-          <p className="hero__statement-line">Creating visuals</p>
-          <p className="hero__statement-line">worth remembering</p>
+          <p className="hero__statement-line">Made to create</p>
+          <p className="hero__statement-line">made to inspire</p>
         </div>
 
         <HomeFilmstrip />
