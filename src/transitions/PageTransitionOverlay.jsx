@@ -1,8 +1,11 @@
 import { useEffect, useRef } from 'react'
 import './PageTransitionOverlay.css'
 
-// Page-change transition clip — swap by replacing /public/logo-transition.mp4.
-const TRANSITION_VIDEO_SRC = '/logo-transition.mp4'
+// Page-change transition clip, hosted on Cloudinary. Only q_auto/f_auto —
+// no resize/crop — since .page-overlay__crop's offsets are calibrated to
+// this exact frame; changing its dimensions would throw the eye crop off.
+const TRANSITION_VIDEO_SRC =
+  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto/v1787931094/animacion.mp4'
 // The clip opens with ~0.8s of the mark still drawing itself in (barely
 // visible), then holds the fully-formed eye. Loop just that stable window so
 // the eye is what's on screen whenever a transition actually fires.

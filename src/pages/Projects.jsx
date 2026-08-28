@@ -5,6 +5,24 @@ import './Projects.css'
 
 const CATEGORIES = ['Travel', 'Weddings', 'Nightlife', 'Afterparties', 'Events']
 
+const TINGLAO_VIDEO_URL =
+  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto/v1787933486/tinglao-club_1.mp4'
+const TINGLAO_POSTER_URL =
+  'https://res.cloudinary.com/xawdx2ki/image/upload/v1787932073/tinglao-club-poster.png'
+const TINGLAO_LOGO_URL =
+  'https://res.cloudinary.com/xawdx2ki/image/upload/v1787932072/tinglao-club-logo.png'
+
+const ANDRES_VIDEO_URL =
+  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1787934852/VIDEO_ANDRES_CON_CAMBIOS.mp4'
+const ANDRES_LOGO_URL =
+  'https://res.cloudinary.com/xawdx2ki/image/upload/f_auto,q_auto/v1787935764/LAPIZARRA.png'
+const ANDRES_POSTER_URL = '/projects/andres-poster.png'
+// Matches the poster frame — the opening black-and-white shot of the full crowd.
+const ANDRES_START_AT = 0
+// The logo is a very wide wordmark (≈3.7:1) — less horizontal padding than
+// the default lets it read at a reasonable size instead of shrinking to fit.
+const ANDRES_LOGO_PADDING = '20% 2%'
+
 // Format alternates within each pair, and which format leads flips every
 // row — wide-left/narrow-right, then narrow-left/wide-right, and so on —
 // so the grid zigzags instead of settling into one fixed rhythm.
@@ -16,13 +34,25 @@ const PROJECTS = [
     type: 'video',
     year: '',
     format: 'horizontal',
-    video: '/projects/tinglao-club.mp4',
-    logo: '/projects/tinglao-club-logo.png',
-    poster: '/projects/tinglao-club-poster.png',
+    video: TINGLAO_VIDEO_URL,
+    logo: TINGLAO_LOGO_URL,
+    poster: TINGLAO_POSTER_URL,
   },
   { category: 'Weddings', title: 'Laura & Marc', label: '[ WEDDING ]', type: 'photo', year: '2025', format: 'vertical' },
   { category: 'Nightlife', title: 'Noche Blanca Club', label: '[ NIGHTLIFE ]', type: 'video', year: '2025', format: 'vertical' },
-  { category: 'Afterparties', title: 'After Costa Sur', label: '[ AFTERPARTY ]', type: 'photo', year: '2024', format: 'horizontal' },
+  {
+    category: 'Events',
+    title: 'La Pizarra de Andrés',
+    label: '[ EVENT ]',
+    type: 'video',
+    year: '',
+    format: 'horizontal',
+    video: ANDRES_VIDEO_URL,
+    logo: ANDRES_LOGO_URL,
+    poster: ANDRES_POSTER_URL,
+    startAt: ANDRES_START_AT,
+    logoPadding: ANDRES_LOGO_PADDING,
+  },
   { category: 'Events', title: 'Festival Costa Sur', label: '[ EVENT ]', type: 'video', year: '2025', format: 'horizontal' },
   { category: 'Travel', title: 'Islas Griegas', label: '[ TRAVEL ]', type: 'photo', year: '2024', format: 'vertical' },
   { category: 'Weddings', title: 'Elena & Jon', label: '[ WEDDING ]', type: 'video', year: '2024', format: 'vertical' },
@@ -96,6 +126,8 @@ export default function Projects() {
                     video={p.video}
                     logo={p.logo}
                     poster={p.poster}
+                    startAt={p.startAt}
+                    logoPadding={p.logoPadding}
                   />
                 </Reveal>
               ))}

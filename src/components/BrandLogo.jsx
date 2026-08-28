@@ -1,6 +1,6 @@
 import './BrandLogo.css'
 
-const LOGO_SRC = '/logo.png'
+const LOGO_SRC = 'https://res.cloudinary.com/xawdx2ki/image/upload/v1787931093/made_abstracto.png'
 const BRAND_NAME = 'Madevisuals'
 
 export default function BrandLogo({ size = 'md', className = '' }) {
