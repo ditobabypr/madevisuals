@@ -118,6 +118,27 @@
   margin-top: 0.6rem;
 }
 
+.contact__submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.contact__submit:disabled:hover {
+  background: transparent;
+  color: var(--accent);
+  transform: none;
+}
+
+.contact__form-error {
+  font-size: 0.85rem;
+  color: var(--accent-2);
+  line-height: 1.5;
+}
+
+.contact__form-error a {
+  text-decoration: underline;
+}
+
 .contact__success {
   display: flex;
   flex-direction: column;

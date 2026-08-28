@@ -53,3 +53,7 @@
   font-size: clamp(1.5rem, 3.3vw, 2.75rem);
   color: var(--text);
 }
+
+.hero__statement-line--thin {
+  font-weight: 300;
+}

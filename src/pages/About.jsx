@@ -1,52 +1,129 @@
 import Reveal from '../components/Reveal'
 import Placeholder from '../components/Placeholder'
+import TransitionLink from '../transitions/TransitionLink'
 import './About.css'
 
-const ROLES = ['Fotógrafo', 'Videógrafo', 'Editor']
-const SKILLS = ['Fotografía', 'Videografía', 'Edición', 'Dirección creativa']
+const PROFILE_PHOTO = 'https://res.cloudinary.com/xawdx2ki/image/upload/v1787884754/perfil.jpg.jpg'
+
+const PHILOSOPHY = [
+  { index: '01', title: 'Observe', text: 'Antes de grabar, miro. Cada lugar y cada persona tienen su propio ritmo, y ese ritmo es lo primero que hay que entender.' },
+  { index: '02', title: 'Connect', text: 'La mejor imagen sale cuando la gente se olvida de la cámara. Eso solo pasa si hay confianza real.' },
+  { index: '03', title: 'Capture', text: 'Los momentos no se repiten. Prefiero estar en el sitio correcto un segundo antes que editar un segundo después.' },
+  { index: '04', title: 'Edit', text: 'El montaje es donde la historia realmente toma forma — ritmo, color y sonido trabajando juntos.' },
+]
+
+const DISCIPLINES = [
+  { label: 'Working', kicker: '01 — En acción', ratio: '4 / 5', type: 'photo', ph: '[ WORKING ]' },
+  { label: 'Editing', kicker: '02 — Edición', ratio: '4 / 5', type: 'photo', ph: '[ EDITING ]' },
+]
+
+const STATS = [
+  { number: '+500', label: 'Videos enviados' },
+  { number: '+20', label: 'Ubicaciones' },
+  { number: '4', label: 'Años de experiencia' },
+]
+
+const ArrowIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </svg>
+)
 
 export default function About() {
   return (
     <div className="page about">
-      <div className="container about__grid">
-        <Reveal className="about__media">
-          <Placeholder label="[ FOTO DEL FOTÓGRAFO ]" ratio="4 / 5" type="photo" />
-        </Reveal>
+      {/* ---------- hero ---------- */}
+      <section className="about-hero">
+        <div className="container about-hero__grid">
+          <Reveal className="about-hero__media">
+            <img src={PROFILE_PHOTO} alt="Retrato del creador" className="about-hero__photo" />
+            <div className="about-hero__photo-overlay" />
+            <span className="about-hero__photo-name">Luis Meda</span>
+          </Reveal>
 
-        <Reveal delay={100} className="about__content">
-          <p className="kicker">Sobre mí</p>
-          <h1 className="about__name">Madevisuals</h1>
+          <Reveal delay={100} className="about-hero__content">
+            <h1 className="page-title about-hero__title">
+              Behind
+              <br />
+              the eye
+            </h1>
+            <p className="about-hero__intro">
+              Soy fotógrafo, videógrafo y editor. Convierto momentos reales
+              — una boda, una noche de club, un viaje — en historias
+              visuales que se sienten igual de intensas después de vividas.
+            </p>
 
-          <div className="about__roles">
-            {ROLES.map((role) => (
-              <span key={role}>{role}</span>
+            <div className="about-hero__stats">
+              {STATS.map((stat) => (
+                <div className="about-hero__stat" key={stat.label}>
+                  <span className="about-hero__stat-number">{stat.number}</span>
+                  <span className="about-hero__stat-label">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ---------- philosophy ---------- */}
+      <section className="section section--alt about-philosophy">
+        <div className="container">
+          <Reveal className="section-head">
+            <h2 className="section-title">How I work</h2>
+          </Reveal>
+
+          <div className="about-philosophy__list">
+            {PHILOSOPHY.map((item, i) => (
+              <Reveal as="div" key={item.index} delay={i * 70} className="about-philosophy__item">
+                <span className="about-philosophy__index">{item.index}</span>
+                <h3 className="about-philosophy__title">{item.title}</h3>
+                <p className="about-philosophy__text">{item.text}</p>
+              </Reveal>
             ))}
           </div>
+        </div>
+      </section>
 
-          <p className="about__quote">
-            "Me gusta capturar la energía de los lugares, las personas y los
-            momentos que no se pueden repetir."
-          </p>
+      {/* ---------- disciplines ---------- */}
+      <section className="section about-disciplines">
+        <div className="container">
+          <Reveal className="section-head">
+            <h2 className="section-title">Working &amp; editing</h2>
+          </Reveal>
 
-          <p className="about__text">
-            Trabajo entre bodas, viajes, discotecas y eventos, adaptando mi
-            estilo a cada historia sin perder una mirada cinematográfica. Para
-            mí, cada proyecto es una oportunidad de traducir una experiencia
-            real en imágenes que se sientan igual de intensas después del
-            momento — con ritmo, energía y una estética que no pasa
-            desapercibida.
-          </p>
-
-          <ul className="about__skills">
-            {SKILLS.map((skill, i) => (
-              <li key={skill}>
-                <span className="about__skills-index">{String(i + 1).padStart(2, '0')}</span>
-                <span>{skill}</span>
-              </li>
+          <div className="about-disciplines__list">
+            {DISCIPLINES.map((item, i) => (
+              <Reveal
+                as="div"
+                key={item.label}
+                delay={i * 80}
+                className={`about-discipline ${i % 2 === 1 ? 'about-discipline--reverse' : ''}`}
+              >
+                <div className="about-discipline__media">
+                  <Placeholder label={item.ph} ratio={item.ratio} type={item.type} />
+                </div>
+                <div className="about-discipline__content">
+                  <span className="about-discipline__kicker">{item.kicker}</span>
+                  <h3 className="about-discipline__label">{item.label}</h3>
+                </div>
+              </Reveal>
             ))}
-          </ul>
-        </Reveal>
-      </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- closing cta ---------- */}
+      <section className="section about-closing">
+        <div className="container">
+          <Reveal className="about-closing__cta">
+            <h2 className="section-title">Let's create.</h2>
+            <TransitionLink to="/contacto" className="link-arrow">
+              Contact
+              <ArrowIcon />
+            </TransitionLink>
+          </Reveal>
+        </div>
+      </section>
     </div>
   )
 }

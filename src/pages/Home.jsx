@@ -20,8 +20,12 @@ export default function Home() {
         </div>
 
         <div className="hero__statement">
-          <p className="hero__statement-line">Made to create</p>
-          <p className="hero__statement-line">made to inspire</p>
+          <p className="hero__statement-line">
+            Made <span className="hero__statement-line--thin">to create</span>
+          </p>
+          <p className="hero__statement-line">
+            <span className="hero__statement-line--thin">made to</span> inspire
+          </p>
         </div>
 
         <HomeFilmstrip />

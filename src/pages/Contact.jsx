@@ -3,25 +3,43 @@ import Reveal from '../components/Reveal'
 import './Contact.css'
 
 const PROJECT_TYPES = ['Boda', 'Viaje', 'Evento / Discoteca', 'Marca', 'Otro proyecto']
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mljeergv'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', projectType: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(false)
 
   const handleChange = (field) => (e) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
+    setSubmitting(true)
+    setError(false)
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(e.target),
+      })
+
+      if (!res.ok) throw new Error('Formspree submission failed')
+      setSubmitted(true)
+    } catch {
+      setError(true)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
     <div className="page contact">
       <div className="container contact__grid">
         <Reveal className="contact__intro">
-          <p className="kicker">Contacto</p>
           <h1 className="page-title">
             ¿Tienes un
             <br />
@@ -37,11 +55,11 @@ export default function Contact() {
             </li>
             <li>
               <span className="contact__details-label">Email</span>
-              <a href="mailto:hola@madevisuals.com">hola@madevisuals.com</a>
+              <a href="mailto:madevcreative@gmail.com">madevcreative@gmail.com</a>
             </li>
             <li>
               <span className="contact__details-label">Teléfono</span>
-              <a href="tel:+34600000000">+34 600 000 000</a>
+              <a href="tel:+34652525871">+34 652 525 871</a>
             </li>
           </ul>
         </Reveal>
@@ -62,6 +80,7 @@ export default function Contact() {
                 <label htmlFor="name">Nombre</label>
                 <input
                   id="name"
+                  name="name"
                   type="text"
                   required
                   placeholder="Tu nombre"
@@ -74,6 +93,7 @@ export default function Contact() {
                 <label htmlFor="email">Email</label>
                 <input
                   id="email"
+                  name="email"
                   type="email"
                   required
                   placeholder="tu@email.com"
@@ -86,6 +106,7 @@ export default function Contact() {
                 <label htmlFor="projectType">Tipo de proyecto</label>
                 <select
                   id="projectType"
+                  name="projectType"
                   required
                   value={form.projectType}
                   onChange={handleChange('projectType')}
@@ -105,6 +126,7 @@ export default function Contact() {
                 <label htmlFor="message">Mensaje</label>
                 <textarea
                   id="message"
+                  name="message"
                   required
                   rows={4}
                   placeholder="Cuéntame sobre tu proyecto..."
@@ -113,8 +135,15 @@ export default function Contact() {
                 />
               </div>
 
-              <button type="submit" className="btn btn--accent contact__submit">
-                Enviar →
+              {error && (
+                <p className="contact__form-error">
+                  No se pudo enviar el mensaje. Inténtalo de nuevo o escribe a{' '}
+                  <a href="mailto:madevcreative@gmail.com">madevcreative@gmail.com</a>.
+                </p>
+              )}
+
+              <button type="submit" className="btn btn--accent contact__submit" disabled={submitting}>
+                {submitting ? 'Enviando...' : 'Enviar →'}
               </button>
             </form>
           )}

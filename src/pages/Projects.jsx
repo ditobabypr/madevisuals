@@ -9,7 +9,17 @@ const CATEGORIES = ['Travel', 'Weddings', 'Nightlife', 'Afterparties', 'Events']
 // row — wide-left/narrow-right, then narrow-left/wide-right, and so on —
 // so the grid zigzags instead of settling into one fixed rhythm.
 const PROJECTS = [
-  { category: 'Travel', title: 'Sudeste Asiático', label: '[ TRAVEL ]', type: 'video', year: '2024', format: 'horizontal' },
+  {
+    category: 'Nightlife',
+    title: 'Tinglao Club',
+    label: '[ NIGHTLIFE ]',
+    type: 'video',
+    year: '',
+    format: 'horizontal',
+    video: '/projects/tinglao-club.mp4',
+    logo: '/projects/tinglao-club-logo.png',
+    poster: '/projects/tinglao-club-poster.png',
+  },
   { category: 'Weddings', title: 'Laura & Marc', label: '[ WEDDING ]', type: 'photo', year: '2025', format: 'vertical' },
   { category: 'Nightlife', title: 'Noche Blanca Club', label: '[ NIGHTLIFE ]', type: 'video', year: '2025', format: 'vertical' },
   { category: 'Afterparties', title: 'After Costa Sur', label: '[ AFTERPARTY ]', type: 'photo', year: '2024', format: 'horizontal' },
@@ -83,6 +93,9 @@ export default function Projects() {
                     category={p.category}
                     title={p.title}
                     year={p.year}
+                    video={p.video}
+                    logo={p.logo}
+                    poster={p.poster}
                   />
                 </Reveal>
               ))}

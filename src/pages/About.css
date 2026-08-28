@@ -1,94 +1,256 @@
 .about {
-  padding-bottom: var(--section-padding-y);
+  padding-bottom: 0;
 }
 
-.about__grid {
+/* ---------- hero ---------- */
+
+.about-hero {
+  padding-top: clamp(2rem, 5vw, 3.5rem);
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+}
+
+.about-hero__grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: clamp(2.5rem, 6vw, 5rem);
   align-items: center;
-  padding-top: clamp(2.5rem, 6vw, 4rem);
 }
 
-.about__name {
+.about-hero__media {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.about-hero__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: min(560px, 68vh);
+  object-fit: cover;
+  object-position: center 22%;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+}
+
+.about-hero__photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(10, 10, 11, 0.88) 100%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
+}
+
+.about-hero__media:hover .about-hero__photo-overlay {
+  opacity: 1;
+}
+
+.about-hero__photo-name {
+  position: absolute;
+  left: clamp(1rem, 2.4vw, 1.6rem);
+  bottom: clamp(1rem, 2.4vw, 1.6rem);
   font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
-  line-height: 0.9;
-  font-size: clamp(3rem, 7vw, 5.4rem);
-  margin-top: 0.4rem;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: var(--text);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  pointer-events: none;
 }
 
-.about__roles {
+.about-hero__media:hover .about-hero__photo-name {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-hero__title {
+  margin-top: 0.6rem;
+}
+
+.about-hero__intro {
+  margin-top: 1.8rem;
+  max-width: 46ch;
+  color: var(--text-muted);
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  line-height: 1.75;
+}
+
+.about-hero__stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.7rem;
-  margin-top: 1.2rem;
+  gap: clamp(1.75rem, 4vw, 2.5rem);
+  margin-top: clamp(2.25rem, 5vw, 3rem);
+  padding: clamp(1.5rem, 3.5vw, 2rem) 0;
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
 }
 
-.about__roles span {
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid var(--accent-line);
-  border-radius: var(--radius-pill);
-  padding: 0.4rem 0.85rem;
-}
-
-.about__quote {
-  margin-top: 2rem;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
-  line-height: 1.3;
-  color: var(--text);
-  max-width: 22ch;
-}
-
-.about__text {
-  margin-top: 1.6rem;
-  max-width: 52ch;
-  color: var(--text-muted);
-  line-height: 1.8;
-}
-
-.about__skills {
-  margin-top: 2.4rem;
+.about-hero__stat {
   display: flex;
   flex-direction: column;
-  gap: 0;
-  border-top: 1px solid var(--border-soft);
+  gap: 0.3rem;
+  padding-right: clamp(1.75rem, 4vw, 2.5rem);
 }
 
-.about__skills li {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  padding: 0.9rem 0;
-  border-bottom: 1px solid var(--border-soft);
+.about-hero__stat + .about-hero__stat {
+  border-left: 1px solid var(--border-soft);
+  padding-left: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.about-hero__stat-number {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-size: clamp(3rem, 6vw, 4.4rem);
+  color: var(--accent);
+}
+
+.about-hero__stat-label {
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.about__skills-index {
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 0.8rem;
   color: var(--text-dim);
 }
 
 @media (max-width: 860px) {
-  .about__grid {
+  .about-hero__grid {
     grid-template-columns: 1fr;
   }
+}
 
-  .about__media {
-    max-width: 340px;
+/* ---------- philosophy ---------- */
+
+.about-philosophy__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(2rem, 5vw, 3.5rem) clamp(2rem, 4vw, 4rem);
+}
+
+.about-philosophy__index {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 0.8rem;
+}
+
+.about-philosophy__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+}
+
+.about-philosophy__text {
+  margin-top: 0.7rem;
+  max-width: 42ch;
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+
+@media (max-width: 620px) {
+  .about-philosophy__list {
+    grid-template-columns: 1fr;
   }
+}
+
+/* ---------- disciplines — editorial, no cards ---------- */
+
+.about-disciplines__list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 7vw, 5rem);
+}
+
+.about-discipline {
+  display: flex;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.about-discipline--reverse {
+  flex-direction: row-reverse;
+}
+
+.about-discipline__media {
+  flex: none;
+  width: min(46%, 560px);
+}
+
+.about-discipline__media .media-placeholder {
+  border-radius: var(--radius-xl);
+}
+
+.about-discipline__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.about-discipline--reverse .about-discipline__content {
+  text-align: right;
+}
+
+.about-discipline__kicker {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+
+.about-discipline__label {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 0.95;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+}
+
+@media (max-width: 780px) {
+  .about-discipline,
+  .about-discipline--reverse {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.4rem;
+  }
+
+  .about-discipline__media {
+    width: 100%;
+  }
+
+  .about-discipline--reverse .about-discipline__content {
+    text-align: left;
+  }
+}
+
+/* ---------- closing cta ---------- */
+
+.about-closing {
+  padding-bottom: var(--section-padding-y);
+}
+
+.about-closing__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.about-closing__cta .section-title {
+  margin: 0;
 }

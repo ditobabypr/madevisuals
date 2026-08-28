@@ -81,7 +81,7 @@ export default function Navbar() {
 
         <div className="navbar__mobile-footer">
           <span>@madevisuals</span>
-          <span>hola@madevisuals.com</span>
+          <span>madevcreative@gmail.com</span>
         </div>
       </div>
     </header>

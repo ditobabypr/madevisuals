@@ -4,3 +4,10 @@ dist-ssr
 .vercel
 *.local
 .DS_Store
+
+# Raw client footage staging + heavy video files — too large for GitHub's
+# 100MB limit and for the repo in general. These are hosted on Cloudinary
+# instead and referenced by URL in code.
+src/images/
+public/highlights.mp4
+public/projects/*.mp4
