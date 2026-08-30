@@ -10,6 +10,7 @@ import Home from './pages/Home'
 // Home loads eagerly (it's the entry point); the rest split into their own
 // chunks so a first visit only pays for the page it lands on.
 const Projects = lazy(() => import('./pages/Projects'))
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 
@@ -27,6 +28,7 @@ function AppShell() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/proyectos" element={<Projects />} />
+            <Route path="/proyectos/:slug" element={<ProjectDetail />} />
             <Route path="/sobre-mi" element={<About />} />
             <Route path="/contacto" element={<Contact />} />
             <Route path="*" element={<Home />} />

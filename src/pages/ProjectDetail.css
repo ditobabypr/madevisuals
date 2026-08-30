@@ -1,0 +1,145 @@
+/* ---------- top: back link + title ---------- */
+
+.project-detail__top {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  padding-top: clamp(2rem, 5vw, 3.5rem);
+  padding-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.project-detail__back {
+  align-self: flex-start;
+}
+
+.project-detail__back svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.35s var(--ease);
+}
+
+.project-detail__back:hover svg {
+  transform: translateX(-4px);
+}
+
+.project-detail__title {
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+}
+
+/* ---------- media flow ---------- */
+
+.project-detail__flow {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+}
+
+.project-block {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  margin-bottom: clamp(4.5rem, 10vw, 8rem);
+}
+
+.project-block:last-child {
+  margin-bottom: 0;
+}
+
+.project-block--video-full,
+.project-block--photo-solo-large {
+  width: 100%;
+}
+
+.project-block--video-wide {
+  width: 100%;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.project-block--photo-solo {
+  width: 100%;
+  max-width: 660px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.project-block--photo-duo > *,
+.project-block--photo-trio > * {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.project-block--photo-duo > *:first-child {
+  flex: 1.35 1 0%;
+}
+
+/* ---------- photos ---------- */
+
+.project-photo {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.project-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+.project-photo:hover img {
+  transform: scale(1.02);
+}
+
+.project-photo--md {
+  border-radius: var(--radius-md);
+}
+
+.project-photo--lg {
+  border-radius: var(--radius-lg);
+}
+
+.project-photo--xl {
+  border-radius: var(--radius-xl);
+}
+
+/* ---------- prev / next ---------- */
+
+.project-detail__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(3rem, 7vw, 5rem) 0 var(--section-padding-y);
+  border-top: 1px solid var(--border-soft);
+}
+
+.project-detail__nav .link-arrow:last-child svg {
+  margin-left: 0.1rem;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 900px) {
+  .project-block--photo-duo,
+  .project-block--photo-trio {
+    flex-direction: column;
+  }
+
+  .project-block--photo-duo > *:first-child {
+    flex: 1 1 0%;
+  }
+
+  .project-block--video-wide,
+  .project-block--photo-solo {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 620px) {
+  .project-block {
+    margin-bottom: clamp(3rem, 12vw, 4rem);
+  }
+}
