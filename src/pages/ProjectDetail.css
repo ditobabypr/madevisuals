@@ -1,108 +1,216 @@
-/* ---------- top: back link + title ---------- */
+/* ---------- banner: the Work cover, small and blurred ---------- */
 
-.project-detail__top {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(1.5rem, 4vw, 2.5rem);
-  padding-top: clamp(2rem, 5vw, 3.5rem);
-  padding-bottom: clamp(2.5rem, 6vw, 4rem);
-}
-
-.project-detail__back {
-  align-self: flex-start;
-}
-
-.project-detail__back svg {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.35s var(--ease);
-}
-
-.project-detail__back:hover svg {
-  transform: translateX(-4px);
-}
-
-.project-detail__title {
-  font-size: clamp(2.6rem, 7vw, 5.5rem);
-}
-
-/* ---------- media flow ---------- */
-
-.project-detail__flow {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: clamp(3rem, 7vw, 5rem);
-}
-
-.project-block {
-  display: flex;
-  align-items: stretch;
-  gap: clamp(1rem, 2.5vw, 2rem);
-  margin-bottom: clamp(4.5rem, 10vw, 8rem);
-}
-
-.project-block:last-child {
-  margin-bottom: 0;
-}
-
-.project-block--video-full,
-.project-block--photo-solo-large {
-  width: 100%;
-}
-
-.project-block--video-wide {
-  width: 100%;
-  max-width: 960px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.project-block--photo-solo {
-  width: 100%;
-  max-width: 660px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.project-block--photo-duo > *,
-.project-block--photo-trio > * {
-  flex: 1 1 0%;
-  min-width: 0;
-}
-
-.project-block--photo-duo > *:first-child {
-  flex: 1.35 1 0%;
-}
-
-/* ---------- photos ---------- */
-
-.project-photo {
+.project-detail__banner {
   position: relative;
   width: 100%;
+  height: clamp(160px, 18vw, 280px);
   overflow: hidden;
+  background: var(--bg);
 }
 
-.project-photo img {
+.project-detail__banner-image {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s var(--ease);
+  filter: blur(9px) brightness(0.55);
+  transform: scale(1.08);
 }
 
-.project-photo:hover img {
-  transform: scale(1.02);
-}
-
-.project-photo--md {
+/* Every logo caps at the same height regardless of its own aspect ratio
+   (wide wordmarks vs. tall/square marks), so they all read as the same
+   visual size instead of whichever shape happens to fill the banner box. */
+.project-detail__banner-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+  max-width: min(58%, 320px);
+  max-height: clamp(40px, 6.5vw, 68px);
+  object-fit: contain;
+  padding: 0.6em 1.1em;
   border-radius: var(--radius-md);
+  background: rgba(10, 10, 11, 0.4);
 }
 
-.project-photo--lg {
+/* ---------- title + text / image row ---------- */
+
+.project-detail__body {
+  padding-top: clamp(2.5rem, 6vw, 4rem);
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+}
+
+.project-detail__title {
+  font-size: clamp(2.6rem, 5.6vw, 5.2rem);
+}
+
+.project-detail__intro-main {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.project-detail__text {
+  max-width: none;
+  width: 100%;
+  color: var(--text-muted);
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem);
+  font-weight: 300;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.project-detail__text-placeholder {
+  min-height: 220px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Every project except Xcape (which uses the sections layout below
+   instead) keeps the title/text next to a project photo. */
+.project-detail__intro--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.55fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.project-detail__intro-image-wrap {
+  width: 100%;
+  max-width: 460px;
+  margin-left: auto;
+}
+
+.project-detail__intro-image {
+  display: block;
+  width: 100%;
+  background: var(--surface);
   border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
-.project-photo--xl {
-  border-radius: var(--radius-xl);
+@media (max-width: 780px) {
+  .project-detail__intro--split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- multi-brand story sections (Xcape) ---------- */
+
+.project-detail__stories {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4.5rem, 10vw, 8rem);
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+}
+
+.project-story {
+  padding-top: clamp(3.5rem, 8vw, 6rem);
+  border-top: 1px solid var(--border-soft);
+}
+
+.project-story:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.project-story__head {
+  margin-bottom: clamp(2rem, 5vw, 3.25rem);
+}
+
+.project-story__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.9rem;
+}
+
+.project-story__kicker::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.project-story__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  font-size: clamp(2.2rem, 5.4vw, 4.4rem);
+}
+
+.project-story__hero {
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+/* The photo collage itself is TetrisCollage.css — a separate, isolated
+   component (nested flexbox squares, guaranteed gap-free). */
+
+/* ---------- main video ---------- */
+
+.project-detail__video-section {
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+
+.project-detail__reels-extra {
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.project-detail__collage {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+.project-detail__mini-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  margin-top: clamp(1.25rem, 3vw, 2rem);
+}
+
+.project-detail__mini-photo {
+  display: block;
+  flex: 1 1 380px;
+  max-width: 520px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.project-detail__reels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.project-detail__reel {
+  flex: 1 1 0%;
+  min-width: 160px;
+  max-width: 300px;
 }
 
 /* ---------- prev / next ---------- */
@@ -116,30 +224,16 @@
   border-top: 1px solid var(--border-soft);
 }
 
-.project-detail__nav .link-arrow:last-child svg {
-  margin-left: 0.1rem;
-}
-
 /* ---------- responsive ---------- */
 
-@media (max-width: 900px) {
-  .project-block--photo-duo,
-  .project-block--photo-trio {
-    flex-direction: column;
-  }
-
-  .project-block--photo-duo > *:first-child {
-    flex: 1 1 0%;
-  }
-
-  .project-block--video-wide,
-  .project-block--photo-solo {
-    max-width: 100%;
+@media (max-width: 780px) {
+  .project-detail__intro {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 620px) {
-  .project-block {
-    margin-bottom: clamp(3rem, 12vw, 4rem);
+@media (max-width: 480px) {
+  .project-detail__reel {
+    min-width: 130px;
   }
 }

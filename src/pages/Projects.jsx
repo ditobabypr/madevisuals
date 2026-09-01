@@ -1,10 +1,7 @@
 import Reveal from '../components/Reveal'
 import ProjectTile from '../components/ProjectTile'
-import Marquee from '../components/Marquee'
 import { slugify } from '../utils/slugify'
 import './Projects.css'
-
-const CATEGORIES = ['Travel', 'Weddings', 'Nightlife', 'Afterparties', 'Events']
 
 // Blurred/darkened band behind the page title — was pointing at a local
 // /public/highlights.mp4 that's gitignored (too heavy for the repo), so it
@@ -291,7 +288,7 @@ const PROJECTS = [
   },
   {
     category: 'Weddings',
-    title: 'Rooftop Vows',
+    title: 'Boda',
     label: '[ WEDDING ]',
     type: 'video',
     year: '2023',
@@ -339,8 +336,6 @@ export default function Projects() {
           </Reveal>
         </div>
       </div>
-
-      <Marquee items={CATEGORIES} speed={22} />
 
       <div className="container">
         <div className="projects__grid">

@@ -74,7 +74,9 @@
 
 .about-hero__intro {
   margin-top: 1.8rem;
-  max-width: 46ch;
+  max-width: 52ch;
+  text-align: justify;
+  text-justify: inter-word;
   color: var(--text-muted);
   font-size: clamp(1rem, 1.3vw, 1.15rem);
   line-height: 1.75;

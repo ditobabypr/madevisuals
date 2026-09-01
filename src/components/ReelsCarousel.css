@@ -1,0 +1,87 @@
+/* Coverflow-style carousel for vertical (9:16) YouTube reels. Isolated
+   component styles — nothing here reaches outside .reels-carousel. */
+
+.reels-carousel {
+  --card-w: clamp(160px, 20vw, 280px);
+  --ratio-w: 9;
+  --ratio-h: 16;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+
+.reels-carousel__stage {
+  position: relative;
+  width: min(100%, calc(var(--card-w) * 3.1));
+  height: calc(var(--card-w) * var(--ratio-h) / var(--ratio-w));
+  overflow: hidden;
+}
+
+.reels-carousel__slot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--card-w);
+  transition: transform 0.6s var(--ease-soft), opacity 0.6s var(--ease-soft), filter 0.6s var(--ease-soft);
+}
+
+.reels-carousel__media {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--ratio-w) / var(--ratio-h);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-elevated);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.reels-carousel__slot--center .reels-carousel__media {
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+}
+
+.reels-carousel__thumb {
+  height: 100%;
+  object-fit: cover;
+}
+
+.reels-carousel__arrow {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.reels-carousel__arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+.reels-carousel__arrow:hover {
+  color: var(--text);
+}
+
+.reels-carousel__arrow--prev:hover {
+  transform: translateX(-3px);
+}
+
+.reels-carousel__arrow--next:hover {
+  transform: translateX(3px);
+}
+
+@media (max-width: 640px) {
+  .reels-carousel {
+    --card-w: clamp(120px, 46vw, 190px);
+    gap: 0.5rem;
+  }
+}

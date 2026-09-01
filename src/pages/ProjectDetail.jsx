@@ -3,24 +3,13 @@ import { useParams, Navigate } from 'react-router-dom'
 import Reveal from '../components/Reveal'
 import Placeholder from '../components/Placeholder'
 import YouTubeEmbed from '../components/YouTubeEmbed'
+import ReelsCarousel from '../components/ReelsCarousel'
+import TetrisCollage from '../components/TetrisCollage'
+import MosaicCollage from '../components/MosaicCollage'
 import TransitionLink from '../transitions/TransitionLink'
 import { PROJECTS, getProjectBySlug } from '../data/projects'
-import { getProjectComposition } from '../data/projectLayout'
+import { getVideoCount } from '../data/projectLayout'
 import './ProjectDetail.css'
-
-const PHOTO_RATIO_BY_BLOCK = {
-  'photo-solo': '3 / 2',
-  'photo-solo-large': '21 / 9',
-  'photo-duo': '4 / 5',
-  'photo-trio': '3 / 4',
-}
-
-const PHOTO_RADIUS_BY_BLOCK = {
-  'photo-solo': 'lg',
-  'photo-solo-large': 'xl',
-  'photo-duo': 'lg',
-  'photo-trio': 'md',
-}
 
 const ArrowLeftIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
@@ -34,32 +23,10 @@ const ArrowRightIcon = () => (
   </svg>
 )
 
-function ProjectPhoto({ src, alt, blockType }) {
-  const ratio = PHOTO_RATIO_BY_BLOCK[blockType] || '4 / 5'
-  const radius = PHOTO_RADIUS_BY_BLOCK[blockType] || 'lg'
-
-  if (!src) {
-    return (
-      <Placeholder
-        label="[ PROJECT IMAGE ]"
-        ratio={ratio}
-        type="photo"
-        className={`project-photo project-photo--${radius}`}
-      />
-    )
-  }
-
-  return (
-    <div className={`project-photo project-photo--${radius}`} style={{ aspectRatio: ratio }}>
-      <img src={src} alt={alt} loading="lazy" />
-    </div>
-  )
-}
-
 export default function ProjectDetail() {
   const { slug } = useParams()
   const project = getProjectBySlug(slug)
-  const composition = useMemo(() => (project ? getProjectComposition(project) : null), [project])
+  const videoCount = useMemo(() => (project ? getVideoCount(project) : 0), [project])
 
   if (!project) return <Navigate to="/proyectos" replace />
 
@@ -69,39 +36,144 @@ export default function ProjectDetail() {
 
   return (
     <div className="page project-detail">
-      <div className="container project-detail__top">
-        <TransitionLink to="/proyectos" className="link-arrow project-detail__back">
-          <ArrowLeftIcon />
-          Work
-        </TransitionLink>
-        <h1 className="page-title project-detail__title">{project.title}</h1>
+      {/* Same cover art (poster + logo) shown on the Work tile — this is the
+          "capture of the Work cover" band, stretched to fill. */}
+      <div className="project-detail__banner">
+        <img src={project.poster} alt="" className="project-detail__banner-image" />
       </div>
 
-      <div className="container project-detail__flow">
-        {composition.blocks.map((block, i) => (
-          <Reveal
-            as="div"
-            key={i}
-            delay={(i % 4) * 70}
-            className={`project-block project-block--${block.type}`}
-          >
-            {block.videoItems.map((vi) => (
-              <YouTubeEmbed
-                key={`v${vi}`}
-                url={project.videos[vi]}
-                title={`${project.title} — video ${vi + 1}`}
-              />
+      <div className="container project-detail__body">
+        <div className={`project-detail__intro ${project.sections.length === 0 ? 'project-detail__intro--split' : ''}`}>
+          <div className="project-detail__intro-main">
+            <Reveal as="h1" className="page-title project-detail__title">
+              {project.title}
+            </Reveal>
+            {project.text ? (
+              <Reveal as="p" delay={60} className="project-detail__text">
+                {project.text}
+              </Reveal>
+            ) : (
+              <Reveal as="div" delay={60} className="project-detail__text-placeholder">
+                [ PROJECT TEXT ]
+              </Reveal>
+            )}
+          </div>
+
+          {project.sections.length === 0 && (
+            <Reveal delay={100} className="project-detail__intro-image-wrap">
+              {project.introMedia === 'video' ? (
+                <YouTubeEmbed
+                  url={project.images[0]}
+                  title={project.title}
+                  ratio="9 / 16"
+                  className="project-detail__intro-image"
+                />
+              ) : project.images[0] ? (
+                <img
+                  src={project.images[0]}
+                  alt={project.title}
+                  className="project-detail__intro-image"
+                  style={{ aspectRatio: '3 / 4', objectFit: 'cover' }}
+                />
+              ) : (
+                <Placeholder
+                  label="[ PROJECT IMAGE ]"
+                  ratio="3 / 4"
+                  type="photo"
+                  className="project-detail__intro-image"
+                />
+              )}
+            </Reveal>
+          )}
+        </div>
+
+        {project.sections.length > 0 ? (
+          <div className="project-detail__stories">
+            {project.sections.map((section, i) => (
+              <Reveal as="section" key={section.label} delay={i * 40} className="project-story">
+                <div className="project-story__head">
+                  <span className="project-story__kicker">{String(i + 1).padStart(2, '0')} — Xcape</span>
+                  <h2 className="project-story__title">{section.label}</h2>
+                </div>
+
+                <div className="project-story__hero">
+                  <YouTubeEmbed url={section.video} title={`${project.title} — ${section.label}`} />
+                </div>
+
+                <TetrisCollage items={section.collage} variant={i} />
+
+                <ReelsCarousel reels={section.reels} label={section.label} />
+              </Reveal>
             ))}
-            {block.photoItems.map((pi) => (
-              <ProjectPhoto
-                key={`p${pi}`}
-                src={project.images[pi]}
-                alt={`${project.title} — foto ${pi + 1}`}
-                blockType={block.type}
-              />
-            ))}
-          </Reveal>
-        ))}
+          </div>
+        ) : (
+          <>
+            {!project.noReels && (
+              <Reveal as="div" delay={160} className="project-detail__video-section">
+                {project.format === 'vertical' ? (
+                  <div className="project-detail__reels">
+                    {Array.from({ length: videoCount }).map((_, i) => (
+                      <YouTubeEmbed
+                        key={i}
+                        url={project.videos[i]}
+                        title={`${project.title} — video ${i + 1}`}
+                        ratio="9 / 16"
+                        className="project-detail__reel"
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <YouTubeEmbed url={project.videos[0]} title={project.title} />
+                )}
+              </Reveal>
+            )}
+
+            <ReelsCarousel
+              reels={project.reelsCarousel}
+              label={project.title}
+              ratio={project.reelsCarouselRatio}
+              cardWidth={project.reelsCarouselWidth}
+            />
+
+            {project.sideImages.length > 0 && (
+              <Reveal as="div" delay={170} className="project-detail__mini-gallery">
+                {project.sideImages.map((url, i) =>
+                  url ? (
+                    <img key={i} src={url} alt="" className="project-detail__mini-photo" />
+                  ) : (
+                    <Placeholder key={i} label="[ IMAGE ]" ratio="4 / 3" type="photo" className="project-detail__mini-photo" />
+                  )
+                )}
+              </Reveal>
+            )}
+
+            {project.photoCollage.length > 0 && (
+              <Reveal as="div" delay={180} className="project-detail__collage">
+                {project.photoCollageShape === 'mosaic' ? (
+                  <MosaicCollage items={project.photoCollage} />
+                ) : (
+                  <TetrisCollage items={project.photoCollage} variant={0} ratio={project.photoCollageRatio} />
+                )}
+              </Reveal>
+            )}
+
+            {project.reels.length > 0 && (
+              <Reveal as="div" delay={200} className="project-detail__reels-extra">
+                <div className="project-detail__reels">
+                  {project.reels.map((url, i) => (
+                    <YouTubeEmbed
+                      key={i}
+                      url={url}
+                      title={`${project.title} — reel ${i + 1}`}
+                      ratio="9 / 16"
+                      className="project-detail__reel"
+                    />
+                  ))}
+                </div>
+              </Reveal>
+            )}
+          </>
+        )}
       </div>
 
       <div className="container project-detail__nav">

@@ -48,9 +48,7 @@ export default function About() {
               the eye
             </h1>
             <p className="about-hero__intro">
-              Soy fotógrafo, videógrafo y editor. Convierto momentos reales
-              — una boda, una noche de club, un viaje — en historias
-              visuales que se sienten igual de intensas después de vividas.
+              Un enfoque creativo basado en el trabajo, el criterio y la atención al detalle. Luis, dentro de Made, desarrolla proyectos audiovisuales de principio a fin, combinando planificación, producción y edición para conseguir un resultado sólido, cuidado y fiel a la identidad de cada propuesta. Porque detrás de cada proyecto hay una persona que confía en el trabajo, y esa confianza merece estar a la altura del resultado.
             </p>
 
             <div className="about-hero__stats">
