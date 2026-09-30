@@ -1,6 +1,8 @@
 import './BrandLogo.css'
 
-const LOGO_SRC = 'https://res.cloudinary.com/xawdx2ki/image/upload/v1787931093/made_abstracto.png'
+// Drop-in folder: save the file as public/logos/brand-logo.png and it just
+// works, no code change needed.
+const LOGO_SRC = '/logos/brand-logo.png'
 const BRAND_NAME = 'Madevisuals'
 
 export default function BrandLogo({ size = 'md', className = '' }) {

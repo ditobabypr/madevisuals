@@ -1,11 +1,9 @@
 import HomeFilmstrip from '../components/HomeFilmstrip'
 import './Home.css'
 
-// q_auto/f_auto let Cloudinary pick the best codec/quality per browser;
-// w_1920 caps the delivered resolution since the source is 4K but this
-// only ever renders as a background video.
-const HERO_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1787931099/COLOR.mp4'
+// Drop-in folder: save the file as public/videos/hero-header.mp4 and it
+// just works, no code change needed.
+const HERO_VIDEO_URL = '/videos/hero-header.mp4'
 
 export default function Home() {
   return (

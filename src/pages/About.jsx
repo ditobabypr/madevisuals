@@ -3,18 +3,39 @@ import Placeholder from '../components/Placeholder'
 import TransitionLink from '../transitions/TransitionLink'
 import './About.css'
 
-const PROFILE_PHOTO = 'https://res.cloudinary.com/xawdx2ki/image/upload/v1787884754/perfil.jpg.jpg'
+const PROFILE_PHOTO = '/projects/perfil.jpg'
 
+// La sección "How I work" de la página About pinta una tarjeta por cada
+// objeto de esta lista, en orden. Para cambiar el texto, edita `title` y
+// `text` aquí abajo. Para añadir o quitar una tarjeta, copia/borra un bloque
+// entero de estos ({ index, title, text }) — el resto de la página se ajusta
+// solo, no hay que tocar nada más.
 const PHILOSOPHY = [
-  { index: '01', title: 'Observe', text: 'Antes de grabar, miro. Cada lugar y cada persona tienen su propio ritmo, y ese ritmo es lo primero que hay que entender.' },
-  { index: '02', title: 'Connect', text: 'La mejor imagen sale cuando la gente se olvida de la cámara. Eso solo pasa si hay confianza real.' },
-  { index: '03', title: 'Capture', text: 'Los momentos no se repiten. Prefiero estar en el sitio correcto un segundo antes que editar un segundo después.' },
-  { index: '04', title: 'Edit', text: 'El montaje es donde la historia realmente toma forma — ritmo, color y sonido trabajando juntos.' },
+  {
+    index: '01',
+    title: 'see',
+    text: 'Antes de crear, hay que observar. Entender el espacio, las personas, la energía y aquello que hace diferente a cada proyecto. La imagen empieza mucho antes de encender la cámara.',
+  },
+  {
+    index: '02',
+    title: 'Connect',
+    text: 'La confianza cambia la imagen. Crear un vínculo real permite que las personas se olviden de la cámara y que los momentos sucedan sin sentirse construidos.',
+  },
+  {
+    index: '03',
+    title: 'make',
+    text: 'Cada imagen tiene una intención. El momento, el encuadre, el movimiento y la luz se combinan para construir algo que no solo se vea bien, sino que tenga identidad propia.',
+  },
+  {
+    index: '04',
+    title: 'Edit',
+    text: 'Después de grabar empieza otra parte de la historia. El montaje encuentra el ritmo, une imágenes, sonido y color y convierte todo lo capturado en una pieza con sentido.',
+  },
 ]
 
 const DISCIPLINES = [
-  { label: 'Working', kicker: '01 — En acción', ratio: '4 / 5', type: 'photo', ph: '[ WORKING ]' },
-  { label: 'Editing', kicker: '02 — Edición', ratio: '4 / 5', type: 'photo', ph: '[ EDITING ]' },
+  { label: 'Working', kicker: '01 — En acción', ratio: '4 / 5', type: 'photo', ph: '[ WORKING ]', image: '/projects/about-working.jpg' },
+  { label: 'Editing', kicker: '02 — Edición', ratio: '4 / 5', type: 'photo', ph: '[ EDITING ]', image: '/projects/about-editing.jpg' },
 ]
 
 const STATS = [
@@ -98,7 +119,11 @@ export default function About() {
                 className={`about-discipline ${i % 2 === 1 ? 'about-discipline--reverse' : ''}`}
               >
                 <div className="about-discipline__media">
-                  <Placeholder label={item.ph} ratio={item.ratio} type={item.type} />
+                  {item.image ? (
+                    <img src={item.image} alt={item.label} className="about-discipline__photo" />
+                  ) : (
+                    <Placeholder label={item.ph} ratio={item.ratio} type={item.type} />
+                  )}
                 </div>
                 <div className="about-discipline__content">
                   <span className="about-discipline__kicker">{item.kicker}</span>
@@ -114,7 +139,11 @@ export default function About() {
       <section className="section about-closing">
         <div className="container">
           <Reveal className="about-closing__cta">
-            <h2 className="section-title">Let's create.</h2>
+            <h2 className="section-title">
+              made with intention
+              <br />
+              made to be felt
+            </h2>
             <TransitionLink to="/contacto" className="link-arrow">
               Contact
               <ArrowIcon />

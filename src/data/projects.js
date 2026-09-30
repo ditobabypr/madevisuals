@@ -33,12 +33,11 @@ const sumoonFestPhotos = toImages(import.meta.glob('/src/assets/sumwoon/*.{jpg,j
 // intro photo never fight over the same pictures.
 const sumoonCoverPhotos = toImages(import.meta.glob('/src/assets/sumoon-cover/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
 const laPizarraPhotos = import.meta.glob('/src/assets/la pizarra de andres/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })
-const kartingDelSolPhotos = toImages(import.meta.glob('/src/assets/karts/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
-const dubsBurgerPhotos = toImages(import.meta.glob('/src/assets/dubs/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
+// Sorted [1.jpg, 2.jpg, 33.jpg, 4.jpg, 5.jpg, 6.jpg] — indexed below to pick
+// specific photos for the project image vs. the collage.
+const laPizarraSorted = toImages(laPizarraPhotos)
 const sabikaPhotos = toImages(import.meta.glob('/src/assets/sabika/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
-const coronaExtraPhotos = toImages(import.meta.glob('/src/assets/corona/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
 const bossaBoraPhotos = toImages(import.meta.glob('/src/assets/bossa bora/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
-const santaRitaPhotos = toImages(import.meta.glob('/src/assets/santa rita/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
 const nvogaPhotos = toImages(import.meta.glob('/src/assets/nvoga/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
 const bodaPhotos = toImages(import.meta.glob('/src/assets/boda/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
 // Separate folder just for Boda's single "project image" (intro) photo —
@@ -56,8 +55,8 @@ const SEEDS = [
   {
     title: 'Tinglao Club',
     format: 'horizontal',
-    poster: 'https://res.cloudinary.com/xawdx2ki/image/upload/v1787932073/tinglao-club-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/v1787932072/tinglao-club-logo.png',
+    poster: '/projects/tinglao-club-poster.png',
+    logo: '/logos/tinglao-club.png',
     videos: ['https://www.youtube.com/watch?v=yx35bDAit3k'],
     reels: ['https://www.youtube.com/shorts/yRKAnT_DrBg', 'https://www.youtube.com/shorts/TZuoSN3-ERM', 'https://www.youtube.com/shorts/lii5LnnPQkg', 'https://www.youtube.com/shorts/Tc2GGw886C0'],
     images: ['/projects/tinglao-club-photo.jpg'],
@@ -65,9 +64,10 @@ const SEEDS = [
   },
   {
     title: 'Lifepro',
+    text: 'Con motivo del lanzamiento de su nueva colección de ropa, Life Pro reunió en un mismo espacio producto, deporte y lifestyle en una jornada recogida en un reel dinámico con una narrativa visual limpia y contemporánea para presentar la colección desde dentro, poniendo el foco en las prendas, las personas y la atmósfera que acompañó a este nuevo capítulo de Life Pro.',
     format: 'vertical',
     poster: '/projects/laura-marc-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/f_auto,q_auto/v1788020795/100.png',
+    logo: '/logos/lifepro.png',
     noReels: true,
     introMedia: 'video',
     images: ['https://www.youtube.com/shorts/BpUH4fvzUWs'],
@@ -77,7 +77,7 @@ const SEEDS = [
     text: 'Summon Fest plantea un reto diferente: condensar la dimensión de un festival multitudinario en piezas breves, directas y visualmente atractivas. Celebrado en Mallorca, el festival reúne a cientos de estudiantes en torno a la música y al ambiente propio de una gran celebración. Una cobertura construida desde una mirada cercana al público, a lo que sucede alrededor del escenario, buscando momentos espontáneos, interacción y situaciones que permitan entender la magnitud del evento sin necesidad de explicarlo. En Summon, el enfoque se centra en condensar la escala del evento en una narrativa visual cercana y dinámica, encontrando entre la multitud los momentos, interacciones y situaciones que mejor representan la experiencia.', 
     format: 'vertical',
     poster: '/projects/noche-blanca-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/f_auto,q_auto/v1788021875/summonfest.png',
+    logo: '/logos/sumoon-fest.png',
     images: sumoonCoverPhotos,
     noReels: true,
     reelsCarousel: [
@@ -89,18 +89,26 @@ const SEEDS = [
   },
   {
     title: 'La Pizarra de Andrés',
+    text: 'La Pizarra de Andrés reúne en un mismo espacio análisis, inversión y conversación con algunas de las voces más relevantes del sector. En colaboración con mdaprods, la cobertura del evento combina fotografía, vídeo y entrevistas a los distintos ponentes, construyendo un registro visual que recoge tanto el contenido como la atmósfera de la jornada. Una narrativa centrada en las personas, las ideas y los momentos que dieron forma al encuentro, trasladando la experiencia más allá del propio espacio a través de piezas pensadas para su comunicación posterior.',
     format: 'horizontal',
     poster: '/projects/andres-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/f_auto,q_auto/v1787935764/LAPIZARRA.png',
+    logo: '/logos/la-pizarra-de-andres.png',
     videos: ['https://www.youtube.com/watch?v=EyN8Cp6_BjM'],
-    photoCollage: toCollage(laPizarraPhotos, 5),
+    images: [laPizarraSorted[2]], // 33.jpg
+    photoCollage: [
+      { url: laPizarraSorted[0] }, // 1.jpg
+      { url: laPizarraSorted[1] }, // 2.jpg
+      { url: laPizarraSorted[0] }, // 1.jpg — replaces 33.jpg's old slot
+      { url: laPizarraSorted[3] }, // 4.jpg
+      { url: laPizarraSorted[4] }, // 5.jpg
+    ],
   },
   {
     title: 'Xcape',
     text: 'Tres años, distintos destinos y una misma intención: construir una forma reconocible de contar la experiencia Xcape. En colaboración con MDAProds, el proyecto abarca la dirección creativa de aftermovies, fotografía y reels desarrollados durante cada operativa, desde Royal Week y los viajes a México hasta Xcape Town en Mallorca. Un trabajo continuo en el que cada destino plantea una narrativa diferente, adaptando el lenguaje visual a sus espacios, personas y momentos sin perder una identidad común. El objetivo es ir más allá de documentar cada viaje y convertir cada experiencia en contenido capaz de transmitir su energía, su ambiente y aquello que hace que Xcape sea Xcape.',
     format: 'horizontal',
     poster: '/projects/costa-sur-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/f_auto,q_auto/v1788019320/Logo-Xcape-blanco.png',
+    logo: '/logos/xcape.png',
     images: ['https://res.cloudinary.com/xawdx2ki/image/upload/v1788140136/DSC03799.jpg'],
     sections: [
       {
@@ -137,23 +145,30 @@ const SEEDS = [
   },
   {
     title: 'Karting del Sol',
+    text: 'Una jornada de karting junto a Pablo Jaime, piloto de F4, planteada como una pieza personal alrededor de la velocidad, el movimiento y la competición.\n\nLa producción combina reel y fotografía para recoger diferentes momentos del día, desde la intensidad de la pista hasta los detalles que acompañan la experiencia. Una narrativa visual dinámica y directa, construida desde el ritmo de la conducción y la energía propia del entorno.',
     format: 'vertical',
     poster: '/projects/islas-griegas-poster.png',
+    images: ['https://www.youtube.com/shorts/fRBA54jWDcM'],
     logo: null,
-    images: kartingDelSolPhotos,
+    introMedia: 'video',
+    noReels: true,
   },
   {
     title: 'Dubs Burger',
+    text: 'Dubs Burger plantea un reto de comunicación integral para una marca gastronómica con una identidad muy marcada: trasladar su esencia más allá del propio local y mantenerla viva en el día a día de sus redes sociales.\nUn proyecto que combina reels, fotografía de producto y ambiente junto con el diseño gráfico para construir una línea visual reconocible y coherente en cada pieza. El resultado es una comunicación dinámica y directa, pensada para funcionar en redes sin perder la personalidad de la marca ni la calidad de cada contenido.',
     format: 'vertical',
     poster: '/projects/elenajon-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/e_trim/f_auto,q_auto/v1788049333/dubs2.png',
-    images: dubsBurgerPhotos,
+    logo: '/logos/dubs-burger.png',
+    noReels: true,
+    noIntroImage: true,
+    reelsCarousel: ['https://www.youtube.com/shorts/x6XTDlD5LAg', 'https://www.youtube.com/shorts/-YAXm3y6_t0', 'https://www.youtube.com/shorts/8sXH8UQyaR0'],
   },
   {
     title: 'Sabika',
     format: 'horizontal',
     poster: '/projects/pacha-rooftop-poster.png',
     logo: '/projects/sabika-logo-2.png',
+    text: 'Una propuesta de contenido construida alrededor de cada nueva colección, buscando una imagen sólida y coherente en todos sus lanzamientos. \n\nSesiones de fotografía, lanzamientos y piezas audiovisuales, desarrolladas específicamente para presentar cada colección y trabajar tanto el producto como el contexto que lo acompaña.',
     videos: ['https://www.youtube.com/watch?v=BcIbj4GheOU'],
     images: sabikaPhotos,
     reelsCarousel: [
@@ -167,15 +182,17 @@ const SEEDS = [
     title: 'Corona Extra',
     format: 'horizontal',
     poster: '/projects/sesion-privada-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/f_auto,q_auto/v1788047703/corona-extra-1-logo-png-transparent.png',
-    images: coronaExtraPhotos,
+    logo: '/logos/corona-extra.png',
+    noIntroImage: true,
+    videos: ['https://www.youtube.com/watch?v=1aDpuOJb6k4'],
+    text: 'Cobertura que combina fotografía y contenido audiovisual para recoger tanto los momentos principales del evento como aquellos detalles que construyen la experiencia alrededor de la marca en este evento junto al mar. Una narrativa visual natural y luminosa, pensada para mostrar el evento desde una perspectiva cercana y aspiracional.\n\nUn proyecto donde producto, espacio y ambiente se integran bajo una misma dirección visual, convirtiendo la experiencia en una pieza de comunicación de marca.',
   },
   {
     title: 'Bossa Bora',
     text: 'Una línea de contenido audiovisual desarrollada para Bossa Bora, buscando equilibrar una estética cuidada con el ritmo y la espontaneidad propios de una fiesta de verano. La grabación combina planos de ambiente, detalles, personas y momentos clave del evento con una edición dinámica, trabajando el movimiento, la música y el ritmo para construir piezas con una identidad visual definida. Un enfoque pensado para mantener una imagen limpia y sofisticada sin perder la energía natural de una noche de verano en Bossa Playa, Torrox.',
     format: 'vertical',
     poster: '/projects/sunrise-session-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/f_auto,q_auto/v1788047612/BossaBora_-_Logo.png',
+    logo: '/logos/bossa-bora.png',
     images: bossaBoraPhotos,
     noReels: true,
     reelsCarousel: [
@@ -189,16 +206,20 @@ const SEEDS = [
   },
   {
     title: 'Santa Rita',
+    text: 'La mejor discoteca de Málaga, la música y la arquitectura del espacio marcan el lenguaje de las distintas producciones realizadas para Santa Rita. Contenido dedicado a aftermovies, conciertos y piezas audiovisuales que exploran el club desde diferentes registros, alternando momentos de mayor intensidad con imágenes más atmosféricas para construir una narrativa que se siente viva y contemporánea. Una línea visual conectada además con el universo de Tinglao Club, donde ambas propuestas comparten una misma sensibilidad audiovisual sin perder su propia personalidad.',
     format: 'vertical',
+    images: ['https://www.youtube.com/shorts/tPTqbJAIIp4'],
     poster: '/projects/marruecos-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/e_trim/f_auto,q_auto/v1788022208/Logo-Santa-Rita.png',
-    images: santaRitaPhotos,
+    logo: '/logos/santa-rita.png',
+    introMedia: 'video',
+    noReels: true,
   },
   {
     title: 'Nvoga',
+    text: 'La arquitectura y el entorno se convierten en los protagonistas de un contenido pensado para mostrar propiedades excepcionales de Marbella desde una perspectiva más cinematográfica. Vídeo, reels y tomas FPV permiten recorrer cada vivienda, revelar sus dimensiones y establecer una relación entre los espacios interiores, la arquitectura y el paisaje. El movimiento de cámara y la composición adquieren aquí un papel esencial, buscando que cada propiedad se perciba no solo como un inmueble, sino como una experiencia espacial.',
     format: 'horizontal',
     poster: '/projects/apertura-aurora-poster.png',
-    logo: 'https://res.cloudinary.com/xawdx2ki/image/upload/f_auto,q_auto/v1788019488/nvoga_1.png',
+    logo: '/logos/nvoga.png',
     logoBackground: 'rgba(6, 6, 7, 0.82)',
     images: nvogaPhotos,
   },
@@ -222,7 +243,7 @@ const SEEDS = [
   },
 ]
 
-export const PROJECTS = SEEDS.map(({ title, format, poster, logo, logoBackground, videos = [], images = [], reels = [], text = '', sections = [], noReels = false, introMedia = 'photo', photoCollage = [], photoCollageRatio = '2 / 1', photoCollageShape = 'rect', reelsCarousel = [], reelsCarouselRatio = '9 / 16', reelsCarouselWidth = undefined, sideImages = [] }) => ({
+export const PROJECTS = SEEDS.map(({ title, format, poster, logo, logoBackground, videos = [], images = [], reels = [], text = '', sections = [], noReels = false, noIntroImage = false, introMedia = 'photo', photoCollage = [], photoCollageRatio = '2 / 1', photoCollageShape = 'rect', reelsCarousel = [], reelsCarouselRatio = '9 / 16', reelsCarouselWidth = undefined, sideImages = [] }) => ({
   slug: slugify(title),
   title,
   format,
@@ -235,6 +256,7 @@ export const PROJECTS = SEEDS.map(({ title, format, poster, logo, logoBackground
   text,
   sections,
   noReels,
+  noIntroImage,
   introMedia,
   photoCollage,
   photoCollageRatio,

@@ -43,7 +43,7 @@ export default function ProjectDetail() {
       </div>
 
       <div className="container project-detail__body">
-        <div className={`project-detail__intro ${project.sections.length === 0 ? 'project-detail__intro--split' : ''}`}>
+        <div className={`project-detail__intro ${project.sections.length === 0 && !project.noIntroImage ? 'project-detail__intro--split' : ''}`}>
           <div className="project-detail__intro-main">
             <Reveal as="h1" className="page-title project-detail__title">
               {project.title}
@@ -59,8 +59,13 @@ export default function ProjectDetail() {
             )}
           </div>
 
-          {project.sections.length === 0 && (
-            <Reveal delay={100} className="project-detail__intro-image-wrap">
+          {project.sections.length === 0 && !project.noIntroImage && (
+            <Reveal
+              delay={100}
+              className={`project-detail__intro-image-wrap ${
+                project.introMedia === 'video' && !project.images[0] ? 'project-detail__intro-image-wrap--compact' : ''
+              }`.trim()}
+            >
               {project.introMedia === 'video' ? (
                 <YouTubeEmbed
                   url={project.images[0]}

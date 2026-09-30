@@ -3,69 +3,57 @@ import TransitionLink from '../transitions/TransitionLink'
 import { slugify } from '../utils/slugify'
 import './HomeFilmstrip.css'
 
-const TINGLAO_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto/v1787933486/tinglao-club_1.mp4'
-const TINGLAO_POSTER_URL =
-  'https://res.cloudinary.com/xawdx2ki/image/upload/v1787932073/tinglao-club-poster.png'
+// Drop-in folder: save the file as exactly this name in public/videos/ and
+// it just works, no code change needed. Same for every other *_VIDEO_URL.
+const TINGLAO_VIDEO_URL = '/videos/tinglao-club.mp4'
+const TINGLAO_POSTER_URL = '/projects/tinglao-club-poster.png'
 
-const ANDRES_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1787934852/VIDEO_ANDRES_CON_CAMBIOS.mp4'
+const ANDRES_VIDEO_URL = '/videos/la-pizarra-de-andres.mp4'
 const ANDRES_POSTER_URL = '/projects/andres-poster.png'
 // Matches the poster frame — the opening black-and-white shot of the full crowd.
 const ANDRES_START_AT = 0
 
-const LIFEPRO_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788020405/LIFE_PRO_CORREGIDO_1.mp4'
+const LIFEPRO_VIDEO_URL = '/videos/lifepro.mp4'
 const LIFEPRO_POSTER_URL = '/projects/laura-marc-poster.png'
 const LIFEPRO_START_AT = 33.2
 
-const SUMMON_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788021717/SUMMON_REEL_GENERAL.mp4'
+const SUMMON_VIDEO_URL = '/videos/sumoon-fest.mp4'
 const SUMMON_POSTER_URL = '/projects/noche-blanca-poster.png'
 const SUMMON_START_AT = 1
 
-const ROYALWEEK_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788017583/AFTERMOVIE_ROYAL_WEEK_VOL_2_1.mp4'
+const ROYALWEEK_VIDEO_URL = '/videos/xcape-royal-week.mp4'
 const ROYALWEEK_POSTER_URL = '/projects/costa-sur-poster.png'
 const ROYALWEEK_START_AT = 0
 
-const KARTING_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788021039/karting_tu_sabes.mp4'
+const KARTING_VIDEO_URL = '/videos/karting-del-sol.mp4'
 const KARTING_POSTER_URL = '/projects/islas-griegas-poster.png'
 const KARTING_START_AT = 4
 
-const DUBS_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788017903/DUBS_REELS.mp4'
+const DUBS_VIDEO_URL = '/videos/dubs-burger.mp4'
 const DUBS_POSTER_URL = '/projects/elenajon-poster.png'
 const DUBS_START_AT = 4
 
-const SABIKA_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788017301/SABIKA_MALAGA_1.mp4'
+const SABIKA_VIDEO_URL = '/videos/sabika.mp4'
 const SABIKA_POSTER_URL = '/projects/pacha-rooftop-poster.png'
 const SABIKA_START_AT = 8.3
 
-const CORONA_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788016975/CORONA_X_BORAZ_1.mp4'
+const CORONA_VIDEO_URL = '/videos/corona-extra.mp4'
 const CORONA_POSTER_URL = '/projects/sesion-privada-poster.png'
 const CORONA_START_AT = 15.8
 
-const BOSSABORA_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788018089/BOSSA_BORA_RECAP_2026.mp4'
+const BOSSABORA_VIDEO_URL = '/videos/bossa-bora.mp4'
 const BOSSABORA_POSTER_URL = '/projects/sunrise-session-poster.png'
 const BOSSABORA_START_AT = 0.3
 
-const DARELL_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788016821/DARELL_SANTA_RITA_1.mp4'
+const DARELL_VIDEO_URL = '/videos/santa-rita.mp4'
 const DARELL_POSTER_URL = '/projects/marruecos-poster.png'
 const DARELL_START_AT = 2
 
-const ATRIA_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788017102/ATRIA_X_NVOGA_-_VILLA_CASIA_1.mp4'
+const ATRIA_VIDEO_URL = '/videos/nvoga.mp4'
 const ATRIA_POSTER_URL = '/projects/apertura-aurora-poster.png'
 const ATRIA_START_AT = 20.2
 
-const CCR_VIDEO_URL =
-  'https://res.cloudinary.com/xawdx2ki/video/upload/q_auto,f_auto,w_1920/v1788051253/BODA_26-7-11_1.mp4'
+const CCR_VIDEO_URL = '/videos/boda.mp4'
 const CCR_POSTER_URL = '/projects/rooftop-vows-poster.png'
 const CCR_START_AT = 0
 

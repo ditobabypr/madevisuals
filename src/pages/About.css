@@ -13,7 +13,7 @@
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: clamp(2.5rem, 6vw, 5rem);
-  align-items: center;
+  align-items: start;
 }
 
 .about-hero__media {
@@ -27,9 +27,9 @@
   display: block;
   width: 100%;
   aspect-ratio: 4 / 5;
-  max-height: min(560px, 68vh);
+  max-height: min(720px, 80vh);
   object-fit: cover;
-  object-position: center 22%;
+  object-position: center 60%;
   border-radius: var(--radius-xl);
   border: 1px solid var(--border);
 }
@@ -190,6 +190,14 @@
 }
 
 .about-discipline__media .media-placeholder {
+  border-radius: var(--radius-xl);
+}
+
+.about-discipline__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
   border-radius: var(--radius-xl);
 }
 
