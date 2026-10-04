@@ -1,11 +1,15 @@
 import Reveal from '../components/Reveal'
 import ProjectTile from '../components/ProjectTile'
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion'
 import { slugify } from '../utils/slugify'
 import './Projects.css'
 
-// Blurred/darkened band behind the page title — reuses the same file as
-// Home's hero reel. Drop-in folder: public/videos/hero-header.mp4.
-const HEADER_VIDEO_URL = '/videos/hero-header.mp4'
+// Blurred/darkened band behind the page title — the same clip as Home's
+// hero reel, exported at 640x360 (~1.8 MB instead of 14 MB): under the 7px
+// blur the extra resolution was invisible. Re-export it from
+// public/videos/hero-header.mp4 whenever that changes.
+const HEADER_VIDEO_URL = '/videos/hero-header-blur.mp4'
+const HEADER_POSTER_URL = '/videos/hero-poster-blur.webp'
 
 // Downloaded locally from the client's own YouTube upload after Cloudinary
 // disabled the account (out of bandwidth) — see public/videos/.
@@ -281,6 +285,12 @@ const PROJECTS = [
 ]
 
 const RATIO_BY_FORMAT = { horizontal: '3 / 2', vertical: '4 / 5' }
+// Rendered width of each tile: a row splits 2.2 : 1 between the formats,
+// and stacks to full width on phones.
+const SIZES_BY_FORMAT = {
+  horizontal: '(max-width: 620px) 100vw, 66vw',
+  vertical: '(max-width: 620px) 100vw, 32vw',
+}
 
 function chunkPairs(items) {
   const rows = []
@@ -291,16 +301,21 @@ function chunkPairs(items) {
 }
 
 export default function Projects() {
+  const reducedMotion = usePrefersReducedMotion()
+
   return (
     <div className="page projects">
       <div className="projects__header">
         <video
           className="projects__header-media"
           src={HEADER_VIDEO_URL}
-          autoPlay
+          poster={HEADER_POSTER_URL}
+          autoPlay={!reducedMotion}
+          preload={reducedMotion ? 'none' : 'auto'}
           muted
           loop
           playsInline
+          aria-hidden="true"
         />
         <div className="projects__header-overlay" />
 
@@ -343,6 +358,8 @@ export default function Projects() {
                     startAt={p.startAt}
                     logoPadding={p.logoPadding}
                     logoBackground={p.logoBackground}
+                    sizes={SIZES_BY_FORMAT[p.format]}
+                    eager={rowIndex === 0}
                   />
                 </Reveal>
               ))}

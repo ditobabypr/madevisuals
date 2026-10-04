@@ -157,9 +157,12 @@
   transition: opacity 0.4s var(--ease), visibility 0.4s var(--ease);
 }
 
+/* Visible immediately on open (the fade is all opacity) so the first link
+   can take keyboard focus right away; closing keeps the delayed hide. */
 .navbar__mobile--open {
   visibility: visible;
   opacity: 1;
+  transition: opacity 0.4s var(--ease), visibility 0s;
 }
 
 .navbar__mobile-link {

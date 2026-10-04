@@ -1,7 +1,10 @@
 import BrandLogo from './BrandLogo'
 import TransitionLink from '../transitions/TransitionLink'
+import { prefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import './Footer.css'
 
+// TODO: these still point at each site's home page, not Madevisuals' own
+// profile/channel — replace with the real URLs.
 const SOCIALS = [
   { label: 'Instagram', href: 'https://instagram.com' },
   { label: 'YouTube', href: 'https://youtube.com' },
@@ -13,7 +16,7 @@ export default function Footer() {
 
   const scrollToTop = (e) => {
     e.preventDefault()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
   }
 
   return (

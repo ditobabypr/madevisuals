@@ -10,7 +10,6 @@
 .hero__media {
   position: absolute;
   inset: 0;
-  will-change: transform, opacity;
 }
 
 .hero__video {

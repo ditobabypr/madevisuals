@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import './PageTransitionOverlay.css'
 
 // Drop-in folder: save the file as public/videos/page-transition.mp4 and it
@@ -9,42 +9,43 @@ const TRANSITION_VIDEO_SRC = '/videos/page-transition.mp4'
 // The clip opens with ~0.8s of the mark still drawing itself in (barely
 // visible), then holds the fully-formed eye. Loop just that stable window so
 // the eye is what's on screen whenever a transition actually fires.
-const LOOP_START = 0.82
+export const LOOP_START = 0.82
 const LOOP_END = 2.6
 
-// Stays mounted and quietly looping for the whole session (just hidden when
-// idle) for two reasons: the clip is fully buffered before the first click,
-// and — critically — the video keeps actively playing at all times. A
-// <video> that's paused and only has its currentTime nudged doesn't reliably
-// repaint in every browser; jumping the time on an already-playing element
-// does, so we never depend on a fresh play() call succeeding at the exact
-// moment someone clicks.
-export default function PageTransitionOverlay({ phase }) {
-  const videoRef = useRef(null)
+// Stays mounted for the whole session (just hidden when idle) so the clip is
+// fully buffered before the first click. It only plays while a transition
+// is on screen — decoding it nonstop behind an invisible overlay cost
+// battery on phones for nothing. The provider starts it from inside the
+// click itself (see TransitionContext's go()), so play() runs during the
+// user gesture and repaints reliably; this effect just keeps it looping
+// while visible and stops it afterwards.
+export default function PageTransitionOverlay({ phase, videoRef }) {
   const active = phase !== 'idle'
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
-    const ensurePlaying = () => {
-      if (video.paused) video.play().catch(() => {})
+    if (!active) {
+      // autoPlay is only there so every browser (iOS included) buffers the
+      // whole clip up front — stop as soon as it has.
+      if (video.readyState >= 4) {
+        video.pause()
+        return
+      }
+      const stop = () => video.pause()
+      video.addEventListener('canplaythrough', stop, { once: true })
+      return () => video.removeEventListener('canplaythrough', stop)
     }
 
     const onTimeUpdate = () => {
       if (video.currentTime >= LOOP_END) video.currentTime = LOOP_START
     }
     video.addEventListener('timeupdate', onTimeUpdate)
-
-    if (phase === 'covering') {
-      video.currentTime = LOOP_START
-      ensurePlaying()
-    } else {
-      ensurePlaying()
-    }
+    if (video.paused) video.play().catch(() => {})
 
     return () => video.removeEventListener('timeupdate', onTimeUpdate)
-  }, [phase])
+  }, [active, videoRef])
 
   return (
     <div className={`page-overlay ${active ? 'page-overlay--active' : ''}`} aria-hidden="true">

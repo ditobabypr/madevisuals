@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;700;800;900&display=swap');
+/* Inter (hero statement only) is loaded from index.html — a <link> there
+   starts downloading in parallel instead of waiting behind this file. */
 
 :root {
   --bg: #0a0a0b;
@@ -85,6 +86,7 @@ ul, ol {
   }
   * {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
@@ -266,6 +268,26 @@ ul, ol {
 
 .link-arrow:hover svg {
   transform: translateX(5px);
+}
+
+/* ---------- route loading fallback ---------- */
+
+.route-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.route-fallback .route-fallback__mark {
+  height: clamp(40px, 6vw, 64px);
+  opacity: 0;
+  animation: route-fallback-pulse 1.4s var(--ease-soft) 0.3s infinite alternate;
+}
+
+@keyframes route-fallback-pulse {
+  from { opacity: 0.15; }
+  to { opacity: 0.6; }
 }
 
 /* ---------- scroll reveal ---------- */

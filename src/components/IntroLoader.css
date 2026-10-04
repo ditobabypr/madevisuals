@@ -18,6 +18,10 @@
   animation: intro-logo-in 700ms var(--ease-soft) forwards;
 }
 
+.intro-loader--quick .intro-loader__logo {
+  animation-duration: 320ms;
+}
+
 .intro-loader--exit .intro-loader__logo {
   animation: intro-logo-out 480ms var(--ease) forwards;
 }

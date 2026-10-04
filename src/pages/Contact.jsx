@@ -1,15 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Reveal from '../components/Reveal'
 import './Contact.css'
 
 const PROJECT_TYPES = ['Boda', 'Viaje', 'Evento / Discoteca', 'Marca', 'Otro proyecto']
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mljeergv'
+const EMPTY_FORM = { name: '', email: '', projectType: '', message: '' }
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', projectType: '', message: '' })
+  const [form, setForm] = useState(EMPTY_FORM)
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(false)
+  const submittingRef = useRef(false)
+  const successRef = useRef(null)
+
+  // The form (and the focused submit button) disappears on success — move
+  // focus to the confirmation so keyboard and screen-reader users land on it.
+  useEffect(() => {
+    if (submitted) successRef.current?.focus()
+  }, [submitted])
 
   const handleChange = (field) => (e) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }))
@@ -17,6 +26,8 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (submittingRef.current) return
+    submittingRef.current = true
     setSubmitting(true)
     setError(false)
 
@@ -28,10 +39,12 @@ export default function Contact() {
       })
 
       if (!res.ok) throw new Error('Formspree submission failed')
+      setForm(EMPTY_FORM)
       setSubmitted(true)
     } catch {
       setError(true)
     } finally {
+      submittingRef.current = false
       setSubmitting(false)
     }
   }
@@ -51,6 +64,7 @@ export default function Contact() {
           <ul className="contact__details">
             <li>
               <span className="contact__details-label">Instagram</span>
+              {/* TODO: point at the real Instagram profile URL. */}
               <a href="https://instagram.com" target="_blank" rel="noreferrer">@madevisuals</a>
             </li>
             <li>
@@ -66,16 +80,16 @@ export default function Contact() {
 
         <Reveal delay={100} className="contact__form-wrap">
           {submitted ? (
-            <div className="contact__success">
-              <span className="contact__success-icon">✓</span>
+            <div className="contact__success" role="status" tabIndex={-1} ref={successRef}>
+              <span className="contact__success-icon" aria-hidden="true">✓</span>
               <h3>Mensaje enviado</h3>
               <p>Gracias por escribir. Te responderé lo antes posible.</p>
-              <button className="link-arrow" onClick={() => setSubmitted(false)}>
+              <button type="button" className="link-arrow" onClick={() => setSubmitted(false)}>
                 Enviar otro mensaje
               </button>
             </div>
           ) : (
-            <form className="contact__form" onSubmit={handleSubmit}>
+            <form className="contact__form" onSubmit={handleSubmit} aria-busy={submitting}>
               <div className="contact__field">
                 <label htmlFor="name">Nombre</label>
                 <input
@@ -83,6 +97,7 @@ export default function Contact() {
                   name="name"
                   type="text"
                   required
+                  autoComplete="name"
                   placeholder="Tu nombre"
                   value={form.name}
                   onChange={handleChange('name')}
@@ -96,6 +111,7 @@ export default function Contact() {
                   name="email"
                   type="email"
                   required
+                  autoComplete="email"
                   placeholder="tu@email.com"
                   value={form.email}
                   onChange={handleChange('email')}
@@ -136,7 +152,7 @@ export default function Contact() {
               </div>
 
               {error && (
-                <p className="contact__form-error">
+                <p className="contact__form-error" role="alert">
                   No se pudo enviar el mensaje. Inténtalo de nuevo o escribe a{' '}
                   <a href="mailto:madevcreative@gmail.com">madevcreative@gmail.com</a>.
                 </p>

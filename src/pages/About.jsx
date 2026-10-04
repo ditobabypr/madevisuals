@@ -1,6 +1,7 @@
 import Reveal from '../components/Reveal'
 import Placeholder from '../components/Placeholder'
 import TransitionLink from '../transitions/TransitionLink'
+import { responsiveImage } from '../utils/responsiveImage'
 import './About.css'
 
 const PROFILE_PHOTO = '/projects/perfil.jpg'
@@ -57,7 +58,12 @@ export default function About() {
       <section className="about-hero">
         <div className="container about-hero__grid">
           <Reveal className="about-hero__media">
-            <img src={PROFILE_PHOTO} alt="Retrato del creador" className="about-hero__photo" />
+            <img
+              decoding="async"
+              {...responsiveImage(PROFILE_PHOTO, '(max-width: 860px) 100vw, 46vw')}
+              alt="Retrato de Luis Meda"
+              className="about-hero__photo"
+            />
             <div className="about-hero__photo-overlay" />
             <span className="about-hero__photo-name">Luis Meda</span>
           </Reveal>
@@ -120,7 +126,13 @@ export default function About() {
               >
                 <div className="about-discipline__media">
                   {item.image ? (
-                    <img src={item.image} alt={item.label} className="about-discipline__photo" />
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      {...responsiveImage(item.image, '(max-width: 780px) 100vw, 560px')}
+                      alt={item.label}
+                      className="about-discipline__photo"
+                    />
                   ) : (
                     <Placeholder label={item.ph} ratio={item.ratio} type={item.type} />
                   )}

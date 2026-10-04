@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
 import TransitionLink from '../transitions/TransitionLink'
@@ -15,6 +15,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
+  const toggleRef = useRef(null)
+  const menuRef = useRef(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -29,6 +31,23 @@ export default function Navbar() {
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
+  }, [menuOpen])
+
+  // Keyboard: focus moves into the menu when it opens, Escape closes it, and
+  // focus goes back to the toggle instead of being stranded on a link that
+  // just turned invisible.
+  useEffect(() => {
+    if (!menuOpen) return
+    menuRef.current?.querySelector('a')?.focus()
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      if (menuRef.current?.contains(document.activeElement)) toggleRef.current?.focus()
+    }
   }, [menuOpen])
 
   return (
@@ -55,18 +74,26 @@ export default function Navbar() {
         </nav>
 
         <button
+          ref={toggleRef}
+          type="button"
           className={`navbar__toggle ${menuOpen ? 'navbar__toggle--open' : ''}`}
           aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
           onClick={() => setMenuOpen((v) => !v)}
         >
-          <span />
-          <span />
-          <span />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
         </button>
       </div>
 
-      <div className={`navbar__mobile ${menuOpen ? 'navbar__mobile--open' : ''}`}>
+      <nav
+        id="mobile-menu"
+        ref={menuRef}
+        aria-label="Menú"
+        className={`navbar__mobile ${menuOpen ? 'navbar__mobile--open' : ''}`}
+      >
         {LINKS.map((link, i) => (
           <TransitionLink
             key={link.to}
@@ -83,7 +110,7 @@ export default function Navbar() {
           <span>@madevisuals</span>
           <span>madevcreative@gmail.com</span>
         </div>
-      </div>
+      </nav>
     </header>
   )
 }

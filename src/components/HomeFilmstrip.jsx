@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import TransitionLink from '../transitions/TransitionLink'
+import { prefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import { slugify } from '../utils/slugify'
+import { responsiveImage } from '../utils/responsiveImage'
 import './HomeFilmstrip.css'
+
+// Thumbs render ≈ 1/13 of the viewport (fixed 92–110px when the strip
+// scrolls on phones).
+const THUMB_SIZES = '(max-width: 620px) 110px, 13vw'
 
 // Drop-in folder: save the file as exactly this name in public/videos/ and
 // it just works, no code change needed. Same for every other *_VIDEO_URL.
@@ -116,11 +122,11 @@ export default function HomeFilmstrip() {
   // loadedmetadata. The poster only hides once `playing` fires, so the
   // first-ever hover never uncovers a blank/black video before a frame has
   // actually decoded.
-  const handleThumbEnter = (i) => (e) => {
+  const startThumb = (thumb, i) => {
     setActiveIndex(i)
-    const video = e.currentTarget.querySelector('.home-filmstrip__video')
-    const posterEl = e.currentTarget.querySelector('.home-filmstrip__poster')
-    if (video) {
+    const video = thumb.querySelector('.home-filmstrip__video')
+    const posterEl = thumb.querySelector('.home-filmstrip__poster')
+    if (video && !prefersReducedMotion() && video.paused) {
       const startAt = PROJECTS[i].startAt || 0
       const reveal = () => {
         if (posterEl) posterEl.classList.add('home-filmstrip__poster--hidden')
@@ -143,9 +149,9 @@ export default function HomeFilmstrip() {
     }
   }
 
-  const handleThumbLeave = (e, i) => {
-    const video = e.currentTarget.querySelector('.home-filmstrip__video')
-    const posterEl = e.currentTarget.querySelector('.home-filmstrip__poster')
+  const stopThumb = (thumb, i) => {
+    const video = thumb.querySelector('.home-filmstrip__video')
+    const posterEl = thumb.querySelector('.home-filmstrip__poster')
     if (video) {
       if (pendingSeeksRef.current[i]) {
         video.removeEventListener('loadedmetadata', pendingSeeksRef.current[i])
@@ -161,6 +167,19 @@ export default function HomeFilmstrip() {
     if (posterEl) posterEl.classList.remove('home-filmstrip__poster--hidden')
   }
 
+  // Mouse hover or keyboard focus only — a tap on a touch screen also fires
+  // enter events, which would start downloading a clip right as the tap
+  // navigates away.
+  const thumbHandlers = (i) => ({
+    onPointerEnter: (e) => (e.pointerType === 'mouse' ? startThumb(e.currentTarget, i) : setActiveIndex(i)),
+    onPointerLeave: (e) => e.pointerType === 'mouse' && stopThumb(e.currentTarget, i),
+    onFocus: (e) => e.currentTarget.matches(':focus-visible') && startThumb(e.currentTarget, i),
+    onBlur: (e) => {
+      stopThumb(e.currentTarget, i)
+      setActiveIndex((current) => (current === i ? null : current))
+    },
+  })
+
   return (
     <div className="home-filmstrip">
       <div
@@ -173,9 +192,7 @@ export default function HomeFilmstrip() {
             key={project.title}
             to={`/proyectos/${slugify(project.title)}`}
             className={`home-filmstrip__item ${activeIndex === i ? 'home-filmstrip__item--active' : ''}`}
-            onMouseEnter={handleThumbEnter(i)}
-            onMouseLeave={(e) => handleThumbLeave(e, i)}
-            onFocus={handleThumbEnter(i)}
+            {...thumbHandlers(i)}
           >
             <span className="home-filmstrip__title">{project.title}</span>
             <span className="home-filmstrip__thumb">
@@ -190,7 +207,12 @@ export default function HomeFilmstrip() {
                     preload="none"
                   />
                   {project.poster && (
-                    <img src={project.poster} alt="" className="home-filmstrip__poster" />
+                    <img
+                      decoding="async"
+                      {...responsiveImage(project.poster, THUMB_SIZES)}
+                      alt=""
+                      className="home-filmstrip__poster"
+                    />
                   )}
                 </>
               ) : (

@@ -1,4 +1,8 @@
 import { slugify } from '../utils/slugify'
+import { addVariants, trackImages } from '../utils/responsiveImage'
+
+// Resized copies of every photo below (see scripts/optimize-images.py).
+addVariants(import.meta.glob(['/src/assets/_optimized/**/*.webp', '!/src/assets/_optimized/public/**'], { eager: true, import: 'default' }))
 
 // Xcape's three collage folders — drop photos straight into
 // src/assets/xcape/<mallorca|mexico|royal-week>/ (any filename, any of
@@ -7,9 +11,9 @@ import { slugify } from '../utils/slugify'
 // order is predictable; prefix with numbers (01_, 02_...) to control it.
 // import.meta.glob needs a literal string pattern (no variables/template
 // interpolation), so each folder gets its own explicit call.
-const mallorcaPhotos = import.meta.glob('/src/assets/xcape/mallorca/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })
-const mexicoPhotos = import.meta.glob('/src/assets/xcape/mexico/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })
-const royalWeekPhotos = import.meta.glob('/src/assets/xcape/royal-week/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })
+const mallorcaPhotos = trackImages(import.meta.glob('/src/assets/xcape/mallorca/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
+const mexicoPhotos = trackImages(import.meta.glob('/src/assets/xcape/mexico/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
+const royalWeekPhotos = trackImages(import.meta.glob('/src/assets/xcape/royal-week/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
 
 function toImages(photoGlob) {
   return Object.keys(photoGlob).sort().map((path) => photoGlob[path])
@@ -27,23 +31,23 @@ function toCollage(photoGlob, count = 10) {
 // Same mechanism, one folder per event — drop photos into
 // src/assets/projects/<slug>/ (any filename, jpg/jpeg/png/webp) and they
 // appear on that project's page automatically, no code changes needed.
-const sumoonFestPhotos = toImages(import.meta.glob('/src/assets/sumwoon/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
+const sumoonFestPhotos = toImages(trackImages(import.meta.glob('/src/assets/sumwoon/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })))
 // Separate folder just for Sumoon Fest's single "project image" (intro)
 // photo — kept apart from src/assets/sumwoon/ so the 6-photo row and the
 // intro photo never fight over the same pictures.
-const sumoonCoverPhotos = toImages(import.meta.glob('/src/assets/sumoon-cover/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
-const laPizarraPhotos = import.meta.glob('/src/assets/la pizarra de andres/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })
+const sumoonCoverPhotos = toImages(trackImages(import.meta.glob('/src/assets/sumoon-cover/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })))
+const laPizarraPhotos = trackImages(import.meta.glob('/src/assets/la pizarra de andres/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
 // Sorted [1.jpg, 2.jpg, 33.jpg, 4.jpg, 5.jpg, 6.jpg] — indexed below to pick
 // specific photos for the project image vs. the collage.
 const laPizarraSorted = toImages(laPizarraPhotos)
-const sabikaPhotos = toImages(import.meta.glob('/src/assets/sabika/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
-const bossaBoraPhotos = toImages(import.meta.glob('/src/assets/bossa bora/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
-const nvogaPhotos = toImages(import.meta.glob('/src/assets/nvoga/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
-const bodaPhotos = toImages(import.meta.glob('/src/assets/boda/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
+const sabikaPhotos = toImages(trackImages(import.meta.glob('/src/assets/sabika/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })))
+const bossaBoraPhotos = toImages(trackImages(import.meta.glob('/src/assets/bossa bora/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })))
+const nvogaPhotos = toImages(trackImages(import.meta.glob('/src/assets/nvoga/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })))
+const bodaPhotos = toImages(trackImages(import.meta.glob('/src/assets/boda/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })))
 // Separate folder just for Boda's single "project image" (intro) photo —
 // kept apart from src/assets/boda/ so the collage and the intro photo
 // never fight over the same pictures.
-const bodaCoverPhotos = toImages(import.meta.glob('/src/assets/boda-cover/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' }))
+const bodaCoverPhotos = toImages(trackImages(import.meta.glob('/src/assets/boda-cover/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' })))
 
 // Same titles, poster/logo art and format as Work and the Home filmstrip —
 // the banner at the top of each detail page reuses the exact same cover

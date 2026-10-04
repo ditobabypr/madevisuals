@@ -1,5 +1,10 @@
 import Placeholder from './Placeholder'
+import { responsiveImage } from '../utils/responsiveImage'
 import './TetrisCollage.css'
+
+// Tiles are cropped (object-fit: cover) into tall and wide slots, so this
+// errs generous — still a fraction of the camera originals.
+const TILE_SIZES = '(max-width: 780px) 70vw, 45vw'
 
 // A square photo wall built from nested flexbox splits (a "BSP tree"),
 // not a grid. Every split divides 100% of its parent's space between its
@@ -18,7 +23,13 @@ function Leaf({ item, flex = 1 }) {
   return (
     <div className="tetris-collage__branch" style={{ flex }}>
       {item?.url ? (
-        <img src={item.url} alt="" className="tetris-collage__tile tetris-collage__tile--image" />
+        <img
+          loading="lazy"
+          decoding="async"
+          {...responsiveImage(item.url, TILE_SIZES)}
+          alt=""
+          className="tetris-collage__tile tetris-collage__tile--image"
+        />
       ) : (
         <Placeholder label="[ IMAGE ]" type="photo" className="tetris-collage__tile" />
       )}

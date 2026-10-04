@@ -152,6 +152,11 @@
   justify-content: center;
 }
 
+/* Focused only so screen readers announce it — it isn't interactive. */
+.contact__success:focus {
+  outline: none;
+}
+
 .contact__success-icon {
   width: 44px;
   height: 44px;

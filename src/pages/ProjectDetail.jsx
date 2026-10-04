@@ -9,7 +9,14 @@ import MosaicCollage from '../components/MosaicCollage'
 import TransitionLink from '../transitions/TransitionLink'
 import { PROJECTS, getProjectBySlug } from '../data/projects'
 import { getVideoCount } from '../data/projectLayout'
+import { responsiveImage } from '../utils/responsiveImage'
 import './ProjectDetail.css'
+
+// The banner is shown under a 9px blur, so a file half the screen width
+// looks identical to a full-size one.
+const BANNER_SIZES = '50vw'
+const INTRO_IMAGE_SIZES = '(max-width: 780px) 100vw, 600px'
+const MINI_PHOTO_SIZES = '(max-width: 600px) 100vw, 520px'
 
 const ArrowLeftIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
@@ -39,7 +46,12 @@ export default function ProjectDetail() {
       {/* Same cover art (poster + logo) shown on the Work tile — this is the
           "capture of the Work cover" band, stretched to fill. */}
       <div className="project-detail__banner">
-        <img src={project.poster} alt="" className="project-detail__banner-image" />
+        <img
+          decoding="async"
+          {...responsiveImage(project.poster, BANNER_SIZES)}
+          alt=""
+          className="project-detail__banner-image"
+        />
       </div>
 
       <div className="container project-detail__body">
@@ -75,7 +87,8 @@ export default function ProjectDetail() {
                 />
               ) : project.images[0] ? (
                 <img
-                  src={project.images[0]}
+                  decoding="async"
+                  {...responsiveImage(project.images[0], INTRO_IMAGE_SIZES)}
                   alt={project.title}
                   className="project-detail__intro-image"
                   style={{ aspectRatio: '3 / 4', objectFit: 'cover' }}
@@ -144,7 +157,14 @@ export default function ProjectDetail() {
               <Reveal as="div" delay={170} className="project-detail__mini-gallery">
                 {project.sideImages.map((url, i) =>
                   url ? (
-                    <img key={i} src={url} alt="" className="project-detail__mini-photo" />
+                    <img
+                      key={i}
+                      loading="lazy"
+                      decoding="async"
+                      {...responsiveImage(url, MINI_PHOTO_SIZES)}
+                      alt=""
+                      className="project-detail__mini-photo"
+                    />
                   ) : (
                     <Placeholder key={i} label="[ IMAGE ]" ratio="4 / 3" type="photo" className="project-detail__mini-photo" />
                   )

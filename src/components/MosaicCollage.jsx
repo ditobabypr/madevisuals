@@ -1,5 +1,11 @@
 import Placeholder from './Placeholder'
+import { responsiveImage } from '../utils/responsiveImage'
 import './MosaicCollage.css'
+
+// Eight columns across the full width — tiles are narrow but cropped
+// (object-fit: cover) from landscape photos, so they need more pixels than
+// their width alone suggests, especially once the block gets taller on phones.
+const TILE_SIZES = '(max-width: 640px) 60vw, 25vw'
 
 // An organic, rounded-silhouette brick mosaic — full width, columns that
 // step shorter toward the outer edges and taller through the middle so
@@ -21,7 +27,13 @@ function Tile({ item, flex }) {
   return (
     <div className="mosaic-collage__tile" style={{ flex }}>
       {item?.url ? (
-        <img src={item.url} alt="" className="mosaic-collage__photo" />
+        <img
+          loading="lazy"
+          decoding="async"
+          {...responsiveImage(item.url, TILE_SIZES)}
+          alt=""
+          className="mosaic-collage__photo"
+        />
       ) : (
         <Placeholder label="[ IMAGE ]" type="photo" className="mosaic-collage__placeholder" />
       )}
