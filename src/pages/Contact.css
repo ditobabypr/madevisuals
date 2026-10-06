@@ -81,9 +81,14 @@
   border-bottom: 1px solid var(--border);
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 0.98rem;
+  /* 16px minimum — anything smaller makes iOS Safari zoom the page in on
+     focus. */
+  font-size: 1rem;
   font-weight: 400;
   padding: 0.6rem 0.1rem;
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
   transition: border-color 0.35s var(--ease);
   resize: vertical;
 }
@@ -123,6 +128,7 @@
   cursor: default;
 }
 
+.contact__submit:disabled,
 .contact__submit:disabled:hover {
   background: transparent;
   color: var(--accent);
@@ -189,6 +195,14 @@
 
 @media (max-width: 860px) {
   .contact__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* "¿Tienes un" is one unbreakable line — on the narrowest phones (320px)
+   the shared page-title minimum made it wider than the screen. */
+@media (max-width: 374px) {
+  .contact .page-title {
+    font-size: 13vw;
   }
 }

@@ -35,12 +35,15 @@ export default function IntroLoader({ onDone }) {
     document.body.style.overflow = 'hidden'
     markIntroSeen()
 
+    // The page underneath has been rendering (and the hero video buffering)
+    // the whole time — once the fade-out starts, hand it back: scroll and
+    // taps work immediately instead of after the fade finishes.
     const hold = quick ? REPEAT_HOLD_MS : FIRST_HOLD_MS
-    const t1 = setTimeout(() => setExiting(true), hold)
-    const t2 = setTimeout(() => {
+    const t1 = setTimeout(() => {
       document.body.style.overflow = prevOverflow
-      onDone()
-    }, hold + EXIT_MS)
+      setExiting(true)
+    }, hold)
+    const t2 = setTimeout(onDone, hold + EXIT_MS)
 
     return () => {
       clearTimeout(t1)

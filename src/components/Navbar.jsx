@@ -29,24 +29,47 @@ export default function Navbar() {
     setMenuOpen(false)
   }, [location.pathname])
 
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-  }, [menuOpen])
-
-  // Keyboard: focus moves into the menu when it opens, Escape closes it, and
-  // focus goes back to the toggle instead of being stranded on a link that
-  // just turned invisible.
+  // Scroll lock only while open — restoring what was there before, so it
+  // never clobbers the intro's own lock.
   useEffect(() => {
     if (!menuOpen) return
-    menuRef.current?.querySelector('a')?.focus()
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [menuOpen])
+
+  // Keyboard: focus moves into the menu when it opens, Tab cycles between
+  // the toggle and the menu links (the page behind is covered), Escape
+  // closes it, and focus goes back to the toggle instead of being stranded
+  // on a link that just turned invisible.
+  useEffect(() => {
+    if (!menuOpen) return
+    const menu = menuRef.current
+    menu?.querySelector('a')?.focus()
 
     const onKeyDown = (e) => {
-      if (e.key === 'Escape') setMenuOpen(false)
+      if (e.key === 'Escape') {
+        setMenuOpen(false)
+        return
+      }
+      if (e.key !== 'Tab' || !menu) return
+      const focusables = [toggleRef.current, ...menu.querySelectorAll('a')]
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     document.addEventListener('keydown', onKeyDown)
     return () => {
       document.removeEventListener('keydown', onKeyDown)
-      if (menuRef.current?.contains(document.activeElement)) toggleRef.current?.focus()
+      if (menu?.contains(document.activeElement)) toggleRef.current?.focus()
     }
   }, [menuOpen])
 
@@ -67,6 +90,7 @@ export default function Navbar() {
               key={link.to}
               to={link.to}
               className={`navbar__link ${location.pathname === link.to ? 'navbar__link--active' : ''}`}
+              aria-current={location.pathname === link.to ? 'page' : undefined}
             >
               {link.label}
             </TransitionLink>
@@ -100,6 +124,10 @@ export default function Navbar() {
             to={link.to}
             className={`navbar__mobile-link ${location.pathname === link.to ? 'navbar__link--active' : ''}`}
             style={{ transitionDelay: `${menuOpen ? i * 60 + 80 : 0}ms` }}
+            aria-current={location.pathname === link.to ? 'page' : undefined}
+            // Other links close the menu under the transition cover (on the
+            // route change); the current page has no navigation to wait for.
+            onClick={() => link.to === location.pathname && setMenuOpen(false)}
           >
             <span className="navbar__mobile-index">{String(i + 1).padStart(2, '0')}</span>
             {link.label}

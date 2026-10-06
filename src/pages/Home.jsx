@@ -1,4 +1,6 @@
+import { useRef } from 'react'
 import HomeFilmstrip from '../components/HomeFilmstrip'
+import useAutoplay from '../hooks/useAutoplay'
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion'
 import './Home.css'
 
@@ -7,10 +9,13 @@ import './Home.css'
 // 4.0): 4K or VP9/AV1 files fail or stutter on many laptops and phones.
 const HERO_VIDEO_URL = '/videos/hero-header.mp4'
 // First frame of the clip — shown while the video buffers instead of black.
-const HERO_POSTER_URL = '/videos/hero-poster.webp'
+// JPEG rather than WebP so older Safari (macOS before Big Sur) shows it too.
+const HERO_POSTER_URL = '/videos/hero-poster.jpg'
 
 export default function Home() {
   const reducedMotion = usePrefersReducedMotion()
+  const videoRef = useRef(null)
+  useAutoplay(videoRef, !reducedMotion)
 
   return (
     <div className="home">
@@ -18,6 +23,7 @@ export default function Home() {
         <div className="hero__media">
           {HERO_VIDEO_URL && (
             <video
+              ref={videoRef}
               className="hero__video"
               src={HERO_VIDEO_URL}
               poster={HERO_POSTER_URL}

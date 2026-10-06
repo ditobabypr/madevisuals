@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import { useLocation, useNavigate } from 'react-router-dom'
 import PageTransitionOverlay, { LOOP_START } from './PageTransitionOverlay'
 import { prefersReducedMotion } from '../hooks/usePrefersReducedMotion'
+import { prefetchPath } from '../routes'
 
 // Single place that owns the "cover -> navigate -> reveal" choreography used
 // for every in-app navigation. Tune COVER_MS / REVEAL_MS to change the feel
@@ -34,6 +35,8 @@ export function TransitionProvider({ children }) {
         navigate(path)
         return
       }
+      // The next page's code loads in parallel with the cover animating in.
+      prefetchPath(path)
       pending.current = path
       origin.current = location.pathname
       // Started here, inside the click, so no browser policy can block it.

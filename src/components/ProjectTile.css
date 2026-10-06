@@ -5,6 +5,11 @@
   overflow: hidden;
   border-radius: var(--radius-md);
   cursor: pointer;
+  /* Press & hold plays the preview — keep iOS's link callout and text
+     selection from hijacking the long press. */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .project-tile .project-tile__media {
@@ -14,7 +19,15 @@
   transition: transform 0.6s var(--ease);
 }
 
-.project-tile:hover .project-tile__media {
+/* Hover on real pointers only (no sticky hover after a tap); on touch the
+   same push-in happens while a preview is held. */
+@media (hover: hover) {
+  .project-tile:hover .project-tile__media {
+    transform: scale(1.05);
+  }
+}
+
+.project-tile[data-preview] .project-tile__media {
   transform: scale(1.05);
 }
 
@@ -42,10 +55,12 @@
   transition: opacity 0.3s var(--ease);
 }
 
-.project-tile__poster--hidden {
+.project-tile[data-preview='playing'] .project-tile__poster {
   opacity: 0;
 }
 
+/* The slow dissolve only plays going in (its transition lives on the
+   hidden state); leaving snaps the logo straight back. */
 .project-tile__logo {
   position: absolute;
   inset: 0;
@@ -56,10 +71,10 @@
   background: rgba(10, 10, 11, 0.55);
   opacity: 1;
   filter: blur(0px);
-  transition: opacity 3s var(--ease), filter 3s var(--ease);
 }
 
-.project-tile__logo--hidden {
+.project-tile[data-preview] .project-tile__logo {
   opacity: 0;
   filter: blur(16px);
+  transition: opacity 3s var(--ease), filter 3s var(--ease);
 }

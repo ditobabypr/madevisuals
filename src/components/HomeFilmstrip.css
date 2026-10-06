@@ -20,7 +20,7 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
 }
 
 .home-filmstrip__track::-webkit-scrollbar {
@@ -36,6 +36,11 @@
   align-items: center;
   text-decoration: none;
   transition: flex-grow 0.42s var(--ease);
+  /* Press & hold plays the preview — keep iOS's link callout and text
+     selection from hijacking the long press. */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .home-filmstrip__item--active {
@@ -120,7 +125,7 @@
   transition: opacity 0.3s var(--ease);
 }
 
-.home-filmstrip__poster--hidden {
+.home-filmstrip__item[data-preview='playing'] .home-filmstrip__poster {
   opacity: 0;
 }
 

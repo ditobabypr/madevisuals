@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useParams, Navigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Reveal from '../components/Reveal'
 import Placeholder from '../components/Placeholder'
 import YouTubeEmbed from '../components/YouTubeEmbed'
@@ -10,6 +10,7 @@ import TransitionLink from '../transitions/TransitionLink'
 import { PROJECTS, getProjectBySlug } from '../data/projects'
 import { getVideoCount } from '../data/projectLayout'
 import { responsiveImage } from '../utils/responsiveImage'
+import { NotFound } from '../routes'
 import './ProjectDetail.css'
 
 // The banner is shown under a 9px blur, so a file half the screen width
@@ -35,7 +36,9 @@ export default function ProjectDetail() {
   const project = getProjectBySlug(slug)
   const videoCount = useMemo(() => (project ? getVideoCount(project) : 0), [project])
 
-  if (!project) return <Navigate to="/proyectos" replace />
+  // A mistyped or outdated project link gets the real 404, not a silent
+  // bounce to Work.
+  if (!project) return <NotFound />
 
   const index = PROJECTS.findIndex((p) => p.slug === slug)
   const prev = PROJECTS[(index - 1 + PROJECTS.length) % PROJECTS.length]

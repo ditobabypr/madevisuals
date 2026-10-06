@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { TransitionProvider } from './transitions/TransitionContext'
 import ScrollToTop from './transitions/ScrollToTop'
@@ -7,29 +7,18 @@ import LogoMark from './components/LogoMark'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
+import { About, Contact, NotFound, ProjectDetail, Projects, prefetchAllPages } from './routes'
 import { prefersReducedMotion } from './hooks/usePrefersReducedMotion'
-
-// Home loads eagerly (it's the entry point); the rest split into their own
-// chunks so a first visit only pays for the page it lands on.
-const PAGE_IMPORTS = [
-  () => import('./pages/Projects'),
-  () => import('./pages/ProjectDetail'),
-  () => import('./pages/About'),
-  () => import('./pages/Contact'),
-  () => import('./pages/NotFound'),
-]
-const [Projects, ProjectDetail, About, Contact, NotFound] = PAGE_IMPORTS.map((load) => lazy(load))
 
 // The page chunks are small — once the browser is idle after the first
 // load, fetch them all so later navigations never wait on the network.
 function usePrefetchPages() {
   useEffect(() => {
-    const prefetch = () => PAGE_IMPORTS.forEach((load) => load().catch(() => {}))
     if ('requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(prefetch, { timeout: 4000 })
+      const id = window.requestIdleCallback(prefetchAllPages, { timeout: 4000 })
       return () => window.cancelIdleCallback(id)
     }
-    const t = setTimeout(prefetch, 2500)
+    const t = setTimeout(prefetchAllPages, 2500)
     return () => clearTimeout(t)
   }, [])
 }

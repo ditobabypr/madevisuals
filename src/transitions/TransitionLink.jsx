@@ -1,9 +1,10 @@
+import { forwardRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useTransition } from './TransitionContext'
 
 // Drop-in replacement for react-router's <Link> that plays the branded
 // cover/reveal animation before actually changing route.
-export default function TransitionLink({ to, children, className, onClick, ...rest }) {
+const TransitionLink = forwardRef(function TransitionLink({ to, children, className, onClick, ...rest }, ref) {
   const { go } = useTransition()
   const location = useLocation()
 
@@ -17,8 +18,10 @@ export default function TransitionLink({ to, children, className, onClick, ...re
   }
 
   return (
-    <a href={to} className={className} onClick={handleClick} {...rest}>
+    <a ref={ref} href={to} className={className} onClick={handleClick} {...rest}>
       {children}
     </a>
   )
-}
+})
+
+export default TransitionLink

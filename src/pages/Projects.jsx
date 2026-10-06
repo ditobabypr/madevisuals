@@ -1,6 +1,8 @@
+import { useRef } from 'react'
 import Reveal from '../components/Reveal'
 import ProjectTile from '../components/ProjectTile'
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion'
+import useAutoplay from '../hooks/useAutoplay'
 import { slugify } from '../utils/slugify'
 import './Projects.css'
 
@@ -9,7 +11,7 @@ import './Projects.css'
 // blur the extra resolution was invisible. Re-export it from
 // public/videos/hero-header.mp4 whenever that changes.
 const HEADER_VIDEO_URL = '/videos/hero-header-blur.mp4'
-const HEADER_POSTER_URL = '/videos/hero-poster-blur.webp'
+const HEADER_POSTER_URL = '/videos/hero-poster-blur.jpg'
 
 // Downloaded locally from the client's own YouTube upload after Cloudinary
 // disabled the account (out of bandwidth) — see public/videos/.
@@ -302,11 +304,14 @@ function chunkPairs(items) {
 
 export default function Projects() {
   const reducedMotion = usePrefersReducedMotion()
+  const headerVideoRef = useRef(null)
+  useAutoplay(headerVideoRef, !reducedMotion)
 
   return (
     <div className="page projects">
       <div className="projects__header">
         <video
+          ref={headerVideoRef}
           className="projects__header-media"
           src={HEADER_VIDEO_URL}
           poster={HEADER_POSTER_URL}

@@ -43,8 +43,10 @@
   pointer-events: none;
 }
 
-.about-hero__media:hover .about-hero__photo-overlay {
-  opacity: 1;
+@media (hover: hover) {
+  .about-hero__media:hover .about-hero__photo-overlay {
+    opacity: 1;
+  }
 }
 
 .about-hero__photo-name {
@@ -63,9 +65,21 @@
   pointer-events: none;
 }
 
-.about-hero__media:hover .about-hero__photo-name {
-  opacity: 1;
-  transform: translateY(0);
+@media (hover: hover) {
+  .about-hero__media:hover .about-hero__photo-name {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* No hover on touch screens — the name caption shows from the start there
+   instead of never appearing. */
+@media (hover: none) {
+  .about-hero__photo-overlay,
+  .about-hero__photo-name {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .about-hero__title {

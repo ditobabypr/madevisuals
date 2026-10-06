@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import TransitionLink from '../transitions/TransitionLink'
-import { prefersReducedMotion } from '../hooks/usePrefersReducedMotion'
+import useVideoPreview from '../hooks/useVideoPreview'
 import { slugify } from '../utils/slugify'
 import { responsiveImage } from '../utils/responsiveImage'
 import './HomeFilmstrip.css'
@@ -91,7 +91,7 @@ const PlayIcon = () => (
 
 // Converts vertical mouse-wheel input into horizontal scroll so desktop
 // users can browse the strip without a trackpad or shift+scroll — only
-// matters on narrow viewports where the strip is allowed to overflow.
+// when the strip actually overflows (narrow viewports).
 function useWheelToHorizontalScroll(ref) {
   useEffect(() => {
     const node = ref.current
@@ -99,6 +99,7 @@ function useWheelToHorizontalScroll(ref) {
 
     const onWheel = (e) => {
       if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
+      if (node.scrollWidth <= node.clientWidth) return
       e.preventDefault()
       node.scrollLeft += e.deltaY
     }
@@ -108,120 +109,63 @@ function useWheelToHorizontalScroll(ref) {
   }, [ref])
 }
 
-export default function HomeFilmstrip() {
-  const [activeIndex, setActiveIndex] = useState(null)
-  const trackRef = useRef(null)
-  const pendingSeeksRef = useRef({})
-  const pendingRevealsRef = useRef({})
-  useWheelToHorizontalScroll(trackRef)
-
-  // Real footage stays muted and paused until hovered — with clips this
-  // heavy, nothing should download before someone actually asks for it.
-  // With preload="none" there's no metadata on the first hover, so setting
-  // currentTime immediately is silently ignored — it has to wait for
-  // loadedmetadata. The poster only hides once `playing` fires, so the
-  // first-ever hover never uncovers a blank/black video before a frame has
-  // actually decoded.
-  const startThumb = (thumb, i) => {
-    setActiveIndex(i)
-    const video = thumb.querySelector('.home-filmstrip__video')
-    const posterEl = thumb.querySelector('.home-filmstrip__poster')
-    if (video && !prefersReducedMotion() && video.paused) {
-      const startAt = PROJECTS[i].startAt || 0
-      const reveal = () => {
-        if (posterEl) posterEl.classList.add('home-filmstrip__poster--hidden')
-      }
-      pendingRevealsRef.current[i] = reveal
-      video.addEventListener('playing', reveal, { once: true })
-      // play() is what actually kicks off the fetch on a preload="none"
-      // video — call it unconditionally, then correct the position once
-      // metadata says seeking will actually stick.
-      video.play().catch(() => {})
-      if (video.readyState >= 1) {
-        video.currentTime = startAt
-      } else {
-        const seek = () => {
-          video.currentTime = startAt
-        }
-        pendingSeeksRef.current[i] = seek
-        video.addEventListener('loadedmetadata', seek, { once: true })
-      }
-    }
-  }
-
-  const stopThumb = (thumb, i) => {
-    const video = thumb.querySelector('.home-filmstrip__video')
-    const posterEl = thumb.querySelector('.home-filmstrip__poster')
-    if (video) {
-      if (pendingSeeksRef.current[i]) {
-        video.removeEventListener('loadedmetadata', pendingSeeksRef.current[i])
-        delete pendingSeeksRef.current[i]
-      }
-      if (pendingRevealsRef.current[i]) {
-        video.removeEventListener('playing', pendingRevealsRef.current[i])
-        delete pendingRevealsRef.current[i]
-      }
-      video.pause()
-      if (video.readyState >= 1) video.currentTime = PROJECTS[i].startAt || 0
-    }
-    if (posterEl) posterEl.classList.remove('home-filmstrip__poster--hidden')
-  }
-
-  // Mouse hover or keyboard focus only — a tap on a touch screen also fires
-  // enter events, which would start downloading a clip right as the tap
-  // navigates away.
-  const thumbHandlers = (i) => ({
-    onPointerEnter: (e) => (e.pointerType === 'mouse' ? startThumb(e.currentTarget, i) : setActiveIndex(i)),
-    onPointerLeave: (e) => e.pointerType === 'mouse' && stopThumb(e.currentTarget, i),
-    onFocus: (e) => e.currentTarget.matches(':focus-visible') && startThumb(e.currentTarget, i),
-    onBlur: (e) => {
-      stopThumb(e.currentTarget, i)
-      setActiveIndex((current) => (current === i ? null : current))
-    },
+// Real footage stays unloaded until someone asks for it — mouse hover,
+// keyboard focus, or press & hold on touch (see useVideoPreview). A plain
+// tap still opens the project.
+function FilmstripItem({ project, active, onActiveChange }) {
+  const { hostRef, videoRef, handlers } = useVideoPreview({
+    src: project.video,
+    startAt: project.startAt || 0,
+    onActiveChange,
   })
 
   return (
+    <TransitionLink
+      ref={hostRef}
+      to={`/proyectos/${slugify(project.title)}`}
+      className={`home-filmstrip__item ${active ? 'home-filmstrip__item--active' : ''}`}
+      {...handlers}
+    >
+      <span className="home-filmstrip__title">{project.title}</span>
+      <span className="home-filmstrip__thumb">
+        {project.video ? (
+          <>
+            <video ref={videoRef} className="home-filmstrip__video" muted loop playsInline preload="none" aria-hidden="true" />
+            {project.poster && (
+              <img
+                decoding="async"
+                {...responsiveImage(project.poster, THUMB_SIZES)}
+                alt=""
+                draggable="false"
+                className="home-filmstrip__poster"
+              />
+            )}
+          </>
+        ) : (
+          <span className="home-filmstrip__play" aria-hidden="true">
+            <PlayIcon />
+          </span>
+        )}
+      </span>
+    </TransitionLink>
+  )
+}
+
+export default function HomeFilmstrip() {
+  const [activeIndex, setActiveIndex] = useState(null)
+  const trackRef = useRef(null)
+  useWheelToHorizontalScroll(trackRef)
+
+  return (
     <div className="home-filmstrip">
-      <div
-        className="home-filmstrip__track"
-        ref={trackRef}
-        onMouseLeave={() => setActiveIndex(null)}
-      >
+      <div className="home-filmstrip__track" ref={trackRef}>
         {PROJECTS.map((project, i) => (
-          <TransitionLink
+          <FilmstripItem
             key={project.title}
-            to={`/proyectos/${slugify(project.title)}`}
-            className={`home-filmstrip__item ${activeIndex === i ? 'home-filmstrip__item--active' : ''}`}
-            {...thumbHandlers(i)}
-          >
-            <span className="home-filmstrip__title">{project.title}</span>
-            <span className="home-filmstrip__thumb">
-              {project.video ? (
-                <>
-                  <video
-                    className="home-filmstrip__video"
-                    src={project.video}
-                    muted
-                    loop
-                    playsInline
-                    preload="none"
-                  />
-                  {project.poster && (
-                    <img
-                      decoding="async"
-                      {...responsiveImage(project.poster, THUMB_SIZES)}
-                      alt=""
-                      className="home-filmstrip__poster"
-                    />
-                  )}
-                </>
-              ) : (
-                <span className="home-filmstrip__play" aria-hidden="true">
-                  <PlayIcon />
-                </span>
-              )}
-            </span>
-          </TransitionLink>
+            project={project}
+            active={activeIndex === i}
+            onActiveChange={(on) => setActiveIndex((current) => (on ? i : current === i ? null : current))}
+          />
         ))}
       </div>
     </div>
