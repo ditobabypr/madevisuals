@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Reveal from '../components/Reveal'
+import { INSTAGRAM } from '../data/socials'
 import './Contact.css'
 
 const PROJECT_TYPES = ['Boda', 'Viaje', 'Evento / Discoteca', 'Marca', 'Otro proyecto']
@@ -64,8 +65,7 @@ export default function Contact() {
           <ul className="contact__details">
             <li>
               <span className="contact__details-label">Instagram</span>
-              {/* TODO: point at the real Instagram profile URL. */}
-              <a href="https://instagram.com" target="_blank" rel="noreferrer">@madevisuals</a>
+              <a href={INSTAGRAM.href} target="_blank" rel="noopener noreferrer">{INSTAGRAM.handle}</a>
             </li>
             <li>
               <span className="contact__details-label">Email</span>

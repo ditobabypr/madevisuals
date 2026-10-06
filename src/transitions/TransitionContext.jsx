@@ -1,14 +1,21 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import PageTransitionOverlay, { LOOP_START } from './PageTransitionOverlay'
+import PageTransitionOverlay from './PageTransitionOverlay'
+import { EYE_END, EYE_HOLD_END, EYE_HOLD_START, EYE_START } from './EyeClip'
 import { prefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import { prefetchPath } from '../routes'
 
 // Single place that owns the "cover -> navigate -> reveal" choreography used
-// for every in-app navigation. Tune COVER_MS / REVEAL_MS to change the feel
-// of every page transition on the site at once.
+// for every in-app navigation. The eye draws itself in, blinks once, and
+// the new page is revealed right after the blink.
+// The route changes behind the cover early on (COVER_MS), so the next page
+// loads and renders while the animation is still playing.
 export const COVER_MS = 500
-export const REVEAL_MS = 320
+// 0 so the cover starts fading right after the blink, exactly like the intro.
+export const REVEAL_MS = 0
+// The clip stalled (not buffered yet, or blocked) — once the page is ready,
+// don't keep the visitor staring at a frozen cover longer than this.
+const STALLED_CLIP_MS = 1000
 // If the next page somehow never renders (e.g. its chunk fails to load on a
 // dropped connection), lift the cover anyway rather than trap the visitor.
 const MAX_COVER_MS = 10000
@@ -21,6 +28,7 @@ export function TransitionProvider({ children }) {
   const [phase, setPhase] = useState('idle') // idle | covering | revealing
   const pending = useRef(null)
   const origin = useRef(null)
+  const pageReady = useRef(false)
   const videoRef = useRef(null)
   // useNavigate() returns a new function whenever the location changes —
   // reading it through a ref keeps the timers below from restarting then.
@@ -35,14 +43,15 @@ export function TransitionProvider({ children }) {
         navigate(path)
         return
       }
-      // The next page's code loads in parallel with the cover animating in.
+      // The next page's code loads in parallel with the animation.
       prefetchPath(path)
       pending.current = path
       origin.current = location.pathname
+      pageReady.current = false
       // Started here, inside the click, so no browser policy can block it.
       const video = videoRef.current
       if (video) {
-        video.currentTime = LOOP_START
+        video.currentTime = EYE_START
         video.play().catch(() => {})
       }
       setPhase('covering')
@@ -52,11 +61,28 @@ export function TransitionProvider({ children }) {
 
   useEffect(() => {
     if (phase === 'covering') {
+      const startedAt = performance.now()
       const t = setTimeout(() => navigateRef.current(pending.current), COVER_MS)
       const failsafe = setTimeout(() => setPhase('revealing'), MAX_COVER_MS)
+
+      // Follows the clip frame by frame: reveal right after the blink. If
+      // the page isn't ready by then, hold on the open eye and wait.
+      let frame = requestAnimationFrame(function tick() {
+        const video = videoRef.current
+        const playing = video && !video.paused && video.readyState >= 2
+        if (playing && video.currentTime >= EYE_END) {
+          if (pageReady.current) return setPhase('revealing')
+          if (video.currentTime >= EYE_HOLD_END) video.currentTime = EYE_HOLD_START
+        } else if (!playing && pageReady.current && performance.now() - startedAt > STALLED_CLIP_MS) {
+          return setPhase('revealing')
+        }
+        frame = requestAnimationFrame(tick)
+      })
+
       return () => {
         clearTimeout(t)
         clearTimeout(failsafe)
+        cancelAnimationFrame(frame)
       }
     }
     if (phase === 'revealing') {
@@ -68,13 +94,13 @@ export function TransitionProvider({ children }) {
     }
   }, [phase])
 
-  // Only uncover once the new page has actually rendered. Navigations run as
-  // React transitions, so while a page's code is still downloading the old
-  // page stays committed — lifting the cover on a timer alone would briefly
-  // show the page being left, then swap.
+  // The new page counts as ready once it has actually rendered. Navigations
+  // run as React transitions, so while a page's code is still downloading
+  // the old page stays committed — revealing on the clip alone could
+  // briefly show the page being left.
   useEffect(() => {
     if (phase === 'covering' && location.pathname !== origin.current) {
-      setPhase('revealing')
+      pageReady.current = true
     }
   }, [phase, location.pathname])
 

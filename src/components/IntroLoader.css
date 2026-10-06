@@ -5,26 +5,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
-  animation: intro-fade-in 200ms var(--ease) forwards;
+  background: #000000;
+  animation: intro-fade-in 220ms var(--ease) forwards;
 }
 
 .intro-loader--exit {
-  animation: intro-fade-out 500ms var(--ease) forwards;
+  animation: intro-fade-out 320ms var(--ease) forwards;
   pointer-events: none;
 }
 
 .intro-loader__logo {
   position: relative;
+}
+
+/* The animated eye draws itself in; only the still fallback needs an
+   entrance of its own. */
+.intro-loader__logo--still {
   animation: intro-logo-in 700ms var(--ease-soft) forwards;
 }
 
-.intro-loader--quick .intro-loader__logo {
-  animation-duration: 320ms;
-}
-
 .intro-loader--exit .intro-loader__logo {
-  animation: intro-logo-out 480ms var(--ease) forwards;
+  animation: intro-logo-out 320ms var(--ease) forwards;
 }
 
 @keyframes intro-fade-in {

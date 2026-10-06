@@ -59,8 +59,10 @@
   transition: font-size 0.4s var(--ease), opacity 0.3s var(--ease);
 }
 
-.navbar__center:hover {
-  color: var(--accent);
+@media (hover: hover) {
+  .navbar__center:hover {
+    color: var(--accent);
+  }
 }
 
 .navbar__links {
@@ -154,9 +156,9 @@
   justify-content: center;
   gap: 1.3rem;
   padding: 0 clamp(1.5rem, 8vw, 4rem);
-  /* 98% opaque — a backdrop blur here was invisible but made phones blur
-     the whole screen on every frame of the fade. */
-  background: rgba(10, 10, 11, 0.98);
+  /* Fully opaque instead of 98% + backdrop blur: same look, without phones
+     blurring the whole screen on every frame of the fade. */
+  background: var(--bg);
   overscroll-behavior: contain;
   visibility: hidden;
   opacity: 0;
@@ -204,22 +206,58 @@
 
 .navbar__mobile-footer {
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  align-self: stretch;
+  gap: 0.6rem;
   margin-top: 1.4rem;
-  font-family: var(--font-body);
-  font-weight: 400;
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  color: var(--text-dim);
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-soft);
+  /* Arrives right after the last menu link. */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+
+.navbar__mobile--open .navbar__mobile-footer {
+  opacity: 1;
+  transform: none;
+  transition-delay: 380ms;
+}
+
+/* Icon-only row: 48px square tap targets around icons the size of the
+   23px eye logo. The negative margin lines the first icon's edge up with
+   the menu numbers above. */
+.navbar__mobile-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  transition: transform 0.2s var(--ease);
+}
+
+.navbar__mobile-contact:first-child {
+  margin-left: -12.5px;
+}
+
+.navbar__mobile-contact svg {
+  flex: none;
+  width: 23px;
+  height: 23px;
+  color: var(--accent);
+}
+
+.navbar__mobile-contact:active {
+  transform: scale(0.9);
 }
 
 @media (max-width: 860px) {
   .navbar__links {
     display: none;
   }
+  /* Same centred wordmark as desktop, scaled to sit between the logo and
+     the menu button on a phone (≈125px wide at 320px, ≈155px at 414px). */
   .navbar__center {
-    display: none;
+    font-size: clamp(1rem, 5vw, 1.35rem);
   }
   .navbar__toggle {
     display: flex;

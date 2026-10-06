@@ -1,66 +1,91 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import LogoMark from './LogoMark'
+import EyeClip, { EYE_CLIP_SRC, EYE_END, EYE_START } from '../transitions/EyeClip'
 import './IntroLoader.css'
 
-// First visit: just long enough for the logo's entrance animation (700ms)
-// to land before it exits. Returning visitors have already seen it, so it
-// plays as a quick blink instead of making them wait again.
-const FIRST_HOLD_MS = 800
-const REPEAT_HOLD_MS = 350
-const EXIT_MS = 500
-const SEEN_KEY = 'madevisuals:intro-seen'
-
-function hasSeenIntro() {
-  try {
-    return localStorage.getItem(SEEN_KEY) === '1'
-  } catch {
-    return false
-  }
-}
-
-function markIntroSeen() {
-  try {
-    localStorage.setItem(SEEN_KEY, '1')
-  } catch {
-    // Storage blocked (private mode etc.) — just shows the full intro again.
-  }
-}
+// Plays the eye animation — it draws itself in, blinks once, and the intro
+// fades out right after the blink. The page underneath renders (and the hero video
+// buffers) the whole time.
+// Same ~2s as a page transition: the clip from EYE_START to EYE_END plus
+// this fade.
+const EXIT_MS = 320
+// If the clip hasn't started by then (slow network, or iOS Low Power Mode
+// blocking autoplay), fall back to the still logo with its own short
+// entrance instead of holding a black screen.
+const CLIP_WAIT_MS = 1200
+const FALLBACK_HOLD_MS = 800
+// Never longer than this, whatever the clip does.
+const MAX_INTRO_MS = 5000
 
 export default function IntroLoader({ onDone }) {
-  const [quick] = useState(hasSeenIntro)
   const [exiting, setExiting] = useState(false)
+  const [fallback, setFallback] = useState(false)
+  const videoRef = useRef(null)
+  const onDoneRef = useRef(onDone)
+  onDoneRef.current = onDone
 
   useEffect(() => {
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    markIntroSeen()
+    const timers = []
+    let frame = 0
+    let exited = false
 
-    // The page underneath has been rendering (and the hero video buffering)
-    // the whole time — once the fade-out starts, hand it back: scroll and
-    // taps work immediately instead of after the fade finishes.
-    const hold = quick ? REPEAT_HOLD_MS : FIRST_HOLD_MS
-    const t1 = setTimeout(() => {
+    // Once the fade-out starts, hand the page back: scroll and taps work
+    // immediately instead of after the fade finishes.
+    const exit = () => {
+      if (exited) return
+      exited = true
+      cancelAnimationFrame(frame)
       document.body.style.overflow = prevOverflow
       setExiting(true)
-    }, hold)
-    const t2 = setTimeout(onDone, hold + EXIT_MS)
+      timers.push(setTimeout(() => onDoneRef.current(), EXIT_MS))
+    }
+
+    const video = videoRef.current
+    let started = false
+    if (video) {
+      // Safari only autoplays when muted is an attribute, not just the
+      // property React sets.
+      video.muted = true
+      video.setAttribute('muted', '')
+      video.play().then(() => (started = true), () => {})
+      frame = requestAnimationFrame(function tick() {
+        if (video.currentTime >= EYE_END) return exit()
+        frame = requestAnimationFrame(tick)
+      })
+    }
+
+    timers.push(
+      setTimeout(() => {
+        if (started && !video.paused) return
+        cancelAnimationFrame(frame)
+        setFallback(true)
+        timers.push(setTimeout(exit, FALLBACK_HOLD_MS))
+      }, CLIP_WAIT_MS)
+    )
+    timers.push(setTimeout(exit, MAX_INTRO_MS))
 
     return () => {
-      clearTimeout(t1)
-      clearTimeout(t2)
+      timers.forEach(clearTimeout)
+      cancelAnimationFrame(frame)
       document.body.style.overflow = prevOverflow
     }
-  }, [onDone, quick])
+  }, [])
 
   return (
-    <div
-      className={`intro-loader ${quick ? 'intro-loader--quick' : ''} ${exiting ? 'intro-loader--exit' : ''}`}
-      aria-hidden="true"
-    >
+    <div className={`intro-loader ${exiting ? 'intro-loader--exit' : ''}`} aria-hidden="true">
       <div className="grain" />
-      <div className="intro-loader__logo">
-        <LogoMark />
-      </div>
+      {fallback ? (
+        <div className="intro-loader__logo intro-loader__logo--still">
+          <LogoMark />
+        </div>
+      ) : (
+        <div className="intro-loader__logo">
+          {/* #t skips the clip's black lead-in even before it's buffered. */}
+          <EyeClip ref={videoRef} src={`${EYE_CLIP_SRC}#t=${EYE_START}`} />
+        </div>
+      )}
     </div>
   )
 }

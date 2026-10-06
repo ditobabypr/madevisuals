@@ -1,15 +1,10 @@
 import BrandLogo from './BrandLogo'
+import { INSTAGRAM, LINKEDIN, YOUTUBE } from '../data/socials'
 import TransitionLink from '../transitions/TransitionLink'
 import { prefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import './Footer.css'
 
-// TODO: these still point at each site's home page, not Madevisuals' own
-// profile/channel — replace with the real URLs.
-const SOCIALS = [
-  { label: 'Instagram', href: 'https://instagram.com' },
-  { label: 'YouTube', href: 'https://youtube.com' },
-  { label: 'Vimeo', href: 'https://vimeo.com' },
-]
+const SOCIALS = [INSTAGRAM, YOUTUBE, LINKEDIN]
 
 export default function Footer() {
   const year = new Date().getFullYear()

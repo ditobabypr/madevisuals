@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
 import TransitionLink from '../transitions/TransitionLink'
+import { InstagramIcon, MailIcon } from './SocialIcons'
+import { EMAIL, INSTAGRAM } from '../data/socials'
 import './Navbar.css'
 
 const LINKS = [
@@ -135,8 +137,24 @@ export default function Navbar() {
         ))}
 
         <div className="navbar__mobile-footer">
-          <span>@madevisuals</span>
-          <span>madevcreative@gmail.com</span>
+          <a
+            className="navbar__mobile-contact"
+            href={INSTAGRAM.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Instagram ${INSTAGRAM.handle}`}
+          >
+            <InstagramIcon />
+          </a>
+          {/* Opens the contact form rather than a mail app. */}
+          <TransitionLink
+            to="/contacto"
+            className="navbar__mobile-contact"
+            aria-label={`Contacto — ${EMAIL}`}
+            onClick={() => location.pathname === '/contacto' && setMenuOpen(false)}
+          >
+            <MailIcon />
+          </TransitionLink>
         </div>
       </nav>
     </header>

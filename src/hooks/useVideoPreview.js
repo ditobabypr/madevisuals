@@ -36,7 +36,7 @@ if (typeof window !== 'undefined') {
 // Only one clip plays at a time across the page.
 let active = null
 
-export default function useVideoPreview({ src, startAt = 0, onActiveChange } = {}) {
+export default function useVideoPreview({ src, startAt = 0, onActiveChange, autoplay = false } = {}) {
   const hostRef = useRef(null)
   const videoRef = useRef(null)
   const reasons = useRef(new Set())
@@ -103,6 +103,11 @@ export default function useVideoPreview({ src, startAt = 0, onActiveChange } = {
     if (!v || !srcWithStart || prefersReducedMotion()) return
     setState('loading')
 
+    // iOS only lets a clip start outside a direct tap (the hold timer isn't
+    // one) if it's muted as an *attribute* — React only sets the property.
+    v.muted = true
+    v.defaultMuted = true
+    v.setAttribute('muted', '')
     if (!v.hasAttribute('src')) v.src = srcWithStart
     // The poster only lifts once a frame is actually on screen — never onto
     // a blank element while the first bytes arrive.
@@ -131,6 +136,12 @@ export default function useVideoPreview({ src, startAt = 0, onActiveChange } = {
     remove('touch')
   }
 
+  // Externally driven preview (the phone filmstrip's centre slot).
+  useEffect(() => {
+    if (autoplay) add('auto')
+    else remove('auto')
+  }, [autoplay])
+
   // Leaving the page mid-preview: abort the download right away instead of
   // waiting for garbage collection.
   useEffect(() => {
@@ -154,33 +165,42 @@ export default function useVideoPreview({ src, startAt = 0, onActiveChange } = {
     onFocus: (e) => isKeyboardFocus(e.currentTarget) && add('focus'),
     onBlur: () => remove('focus'),
 
-    onPointerDown: (e) => {
-      if (e.pointerType === 'mouse' || !e.isPrimary) return
+    // Touch uses touch events rather than pointer events: browsers fire
+    // pointercancel as soon as they *might* turn a press into a gesture
+    // (Android does on long presses), which killed the preview mid-hold.
+    // Touch events keep reporting until the finger actually lifts.
+    onTouchStart: (e) => {
       cancelTouch()
+      if (e.touches.length !== 1) return
       if (performance.now() - lastScrollAt < SCROLL_QUIET_MS) return
-      const t = { x: e.clientX, y: e.clientY, at: performance.now(), held: false }
+      const { clientX, clientY } = e.touches[0]
+      const t = { x: clientX, y: clientY, at: performance.now(), held: false }
       t.timer = setTimeout(() => {
+        // The page started moving under the finger — that's a scroll.
+        if (lastScrollAt > t.at) return
         t.held = true
         add('touch')
       }, HOLD_DELAY_MS)
       touch.current = t
     },
-    onPointerMove: (e) => {
+    onTouchMove: (e) => {
       const t = touch.current
-      if (t && Math.hypot(e.clientX - t.x, e.clientY - t.y) > MOVE_TOLERANCE_PX) cancelTouch()
+      const p = e.touches[0]
+      if (t && p && Math.hypot(p.clientX - t.x, p.clientY - t.y) > MOVE_TOLERANCE_PX) cancelTouch()
     },
-    onPointerUp: () => {
+    onTouchEnd: (e) => {
       const t = touch.current
       if (!t) return
       // A long press was a preview — lifting the finger shouldn't also open
-      // the project.
+      // the project. Cancelling touchend stops the click being synthesised;
+      // the click guard below covers browsers that send it anyway.
       if (t.held && performance.now() - t.at >= TAP_MAX_MS) {
+        if (e.cancelable) e.preventDefault()
         suppressClickUntil.current = performance.now() + SUPPRESS_CLICK_MS
       }
       cancelTouch()
     },
-    // The browser took the gesture over to scroll.
-    onPointerCancel: cancelTouch,
+    onTouchCancel: cancelTouch,
     // Long-pressing a link opens the system link menu on Android.
     onContextMenu: (e) => {
       if (touch.current?.held) e.preventDefault()

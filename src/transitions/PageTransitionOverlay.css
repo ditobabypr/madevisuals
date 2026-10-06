@@ -8,24 +8,27 @@
   background: #000000;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 220ms ease;
+  /* Same timing as the intro: 220ms in, 320ms out. */
+  transition: opacity 320ms ease;
 }
 
 .page-overlay--active {
   opacity: 1;
   pointer-events: auto;
+  transition-duration: 220ms;
 }
 
 .page-overlay__logo {
   position: relative;
   opacity: 0;
   transform: scale(0.92);
-  transition: opacity 220ms ease, transform 220ms ease;
+  transition: opacity 320ms ease, transform 320ms ease;
 }
 
 .page-overlay--active .page-overlay__logo {
   opacity: 1;
   transform: scale(1);
+  transition-duration: 220ms;
 }
 
 /* Crop window sized/positioned from the measured bounding box of the eye

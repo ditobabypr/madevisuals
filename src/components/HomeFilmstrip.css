@@ -10,6 +10,40 @@
   background: linear-gradient(180deg, transparent 0%, rgba(8, 8, 9, 0.5) 40%, rgba(8, 8, 9, 0.82) 100%);
 }
 
+.home-filmstrip__socials {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0 calc(var(--gutter) - 10px);
+  margin-bottom: 0.4rem;
+}
+
+/* 40px hit area around an 20px line icon. */
+.home-filmstrip__socials a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--text-muted);
+  transition: color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.home-filmstrip__socials svg {
+  width: 20px;
+  height: 20px;
+}
+
+.home-filmstrip__socials a:hover {
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 860px) {
+  .home-filmstrip__socials {
+    display: none;
+  }
+}
+
 .home-filmstrip__track {
   display: flex;
   align-items: flex-end;
@@ -129,16 +163,51 @@
   opacity: 0;
 }
 
+/* Phones: the strip slides past a fixed centre slot. Whichever thumb sits
+   there grows, shows its title and (once it rests) plays its clip. Thumbs
+   keep a fixed width and grow with transform only — resizing them would
+   shift the strip, which would change which one is centred, and loop. */
 @media (max-width: 620px) {
   .home-filmstrip__track {
+    --thumb-w: 104px;
+    position: relative;
+    gap: 12px;
+    padding-top: 42px;
+    padding-bottom: 10px;
     overflow-x: auto;
+    scroll-snap-type: x mandatory;
   }
 
-  .home-filmstrip__item {
-    flex: 0 0 92px;
+  /* Room either side so the first and last thumbs can reach the centre. */
+  .home-filmstrip__track::before,
+  .home-filmstrip__track::after {
+    content: '';
+    flex: 0 0 calc(50% - var(--thumb-w) / 2 - 12px);
+  }
+
+  .home-filmstrip__item,
+  .home-filmstrip__item--active {
+    flex: 0 0 var(--thumb-w);
+    scroll-snap-align: center;
+  }
+
+  .home-filmstrip__thumb {
+    max-height: none;
+    transform-origin: 50% 100%;
+    transition: transform 0.42s var(--ease), border-color 0.3s var(--ease);
   }
 
   .home-filmstrip__item--active {
-    flex: 0 0 110px;
+    z-index: 1;
+  }
+
+  .home-filmstrip__item--active .home-filmstrip__thumb {
+    transform: scale(1.18);
+  }
+
+  /* Clears the thumb's grown top edge. */
+  .home-filmstrip__title {
+    top: -36px;
+    font-size: 0.7rem;
   }
 }

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import TransitionLink from '../transitions/TransitionLink'
 import useVideoPreview from '../hooks/useVideoPreview'
+import { InstagramIcon, LinkedInIcon, YouTubeIcon } from './SocialIcons'
+import { INSTAGRAM, LINKEDIN, YOUTUBE } from '../data/socials'
 import { slugify } from '../utils/slugify'
 import { responsiveImage } from '../utils/responsiveImage'
 import './HomeFilmstrip.css'
@@ -83,6 +85,13 @@ const PROJECTS = [
   { title: 'Boda', video: CCR_VIDEO_URL, poster: CCR_POSTER_URL, startAt: CCR_START_AT },
 ]
 
+// Desktop only — on phones the same links live in the menu.
+const SOCIALS = [
+  { ...INSTAGRAM, Icon: InstagramIcon },
+  { ...YOUTUBE, Icon: YouTubeIcon },
+  { ...LINKEDIN, Icon: LinkedInIcon },
+]
+
 const PlayIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor">
     <path d="M9 7l8 5-8 5z" />
@@ -109,22 +118,108 @@ function useWheelToHorizontalScroll(ref) {
   }, [ref])
 }
 
-// Real footage stays unloaded until someone asks for it — mouse hover,
-// keyboard focus, or press & hold on touch (see useVideoPreview). A plain
-// tap still opens the project.
-function FilmstripItem({ project, active, onActiveChange }) {
+// Phones: the strip scrolls sideways past a fixed centre slot (see CSS).
+const CENTER_MODE_QUERY = '(max-width: 620px)'
+// A thumb has to rest in the centre this long before its clip starts, so a
+// quick swipe across the strip doesn't start (and download) every clip.
+const CENTER_SETTLE_MS = 260
+
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches)
+  useEffect(() => {
+    const mql = window.matchMedia(query)
+    const onChange = () => setMatches(mql.matches)
+    onChange()
+    mql.addEventListener('change', onChange)
+    return () => mql.removeEventListener('change', onChange)
+  }, [query])
+  return matches
+}
+
+// Which thumb sits under the strip's centre line, and which one has stayed
+// there long enough to play. Clips only start once the visitor has actually
+// moved the strip — landing on Home doesn't start downloading one.
+function useCenteredItem(trackRef, enabled) {
+  const [centerIndex, setCenterIndex] = useState(enabled ? 0 : null)
+  const [playIndex, setPlayIndex] = useState(null)
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track || !enabled) {
+      setCenterIndex(null)
+      setPlayIndex(null)
+      return
+    }
+
+    let frame = 0
+    let settle = 0
+    let current = -1
+    let touched = false
+
+    const measure = () => {
+      frame = 0
+      const items = track.querySelectorAll('.home-filmstrip__item')
+      const middle = track.scrollLeft + track.clientWidth / 2
+      let best = 0
+      let bestDistance = Infinity
+      items.forEach((item, i) => {
+        const distance = Math.abs(item.offsetLeft + item.offsetWidth / 2 - middle)
+        if (distance < bestDistance) {
+          bestDistance = distance
+          best = i
+        }
+      })
+      if (best === current) return
+      current = best
+      setCenterIndex(best)
+      setPlayIndex(null)
+      clearTimeout(settle)
+      if (touched) settle = setTimeout(() => setPlayIndex(best), CENTER_SETTLE_MS)
+    }
+
+    const onScroll = () => {
+      if (!touched) {
+        touched = true
+        current = -1 // re-arm the settle timer for wherever it is now
+      }
+      if (!frame) frame = requestAnimationFrame(measure)
+    }
+
+    measure()
+    track.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      track.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(frame)
+      clearTimeout(settle)
+    }
+  }, [trackRef, enabled])
+
+  return [centerIndex, playIndex]
+}
+
+// Real footage stays unloaded until someone asks for it — mouse hover or
+// keyboard focus on desktop, resting in the centre slot on phones (see
+// useVideoPreview). A plain tap still opens the project.
+function FilmstripItem({ project, active, autoplay, centerMode, onActiveChange }) {
   const { hostRef, videoRef, handlers } = useVideoPreview({
     src: project.video,
     startAt: project.startAt || 0,
-    onActiveChange,
+    // In centre mode the strip's position alone decides what's active.
+    onActiveChange: centerMode ? undefined : onActiveChange,
+    autoplay,
   })
+
+  // The centre slot replaces press & hold on phones.
+  const itemHandlers = centerMode
+    ? Object.fromEntries(Object.entries(handlers).filter(([name]) => !/^onTouch|^onContextMenu/.test(name)))
+    : handlers
 
   return (
     <TransitionLink
       ref={hostRef}
       to={`/proyectos/${slugify(project.title)}`}
       className={`home-filmstrip__item ${active ? 'home-filmstrip__item--active' : ''}`}
-      {...handlers}
+      {...itemHandlers}
     >
       <span className="home-filmstrip__title">{project.title}</span>
       <span className="home-filmstrip__thumb">
@@ -152,19 +247,32 @@ function FilmstripItem({ project, active, onActiveChange }) {
 }
 
 export default function HomeFilmstrip() {
-  const [activeIndex, setActiveIndex] = useState(null)
+  const [hoverIndex, setHoverIndex] = useState(null)
   const trackRef = useRef(null)
+  const centerMode = useMediaQuery(CENTER_MODE_QUERY)
+  const [centerIndex, playIndex] = useCenteredItem(trackRef, centerMode)
   useWheelToHorizontalScroll(trackRef)
+
+  const activeIndex = centerMode ? centerIndex : hoverIndex
 
   return (
     <div className="home-filmstrip">
+      <nav className="home-filmstrip__socials" aria-label="Redes sociales">
+        {SOCIALS.map(({ label, href, Icon }) => (
+          <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} title={label}>
+            <Icon />
+          </a>
+        ))}
+      </nav>
       <div className="home-filmstrip__track" ref={trackRef}>
         {PROJECTS.map((project, i) => (
           <FilmstripItem
             key={project.title}
             project={project}
             active={activeIndex === i}
-            onActiveChange={(on) => setActiveIndex((current) => (on ? i : current === i ? null : current))}
+            autoplay={centerMode && playIndex === i}
+            centerMode={centerMode}
+            onActiveChange={(on) => setHoverIndex((current) => (on ? i : current === i ? null : current))}
           />
         ))}
       </div>
