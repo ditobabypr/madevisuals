@@ -94,6 +94,37 @@
   }
 }
 
+/* Phones: a smaller, tighter header so the first project tiles show up
+   without scrolling past a wall of title. */
+@media (max-width: 620px) {
+  .projects__header {
+    min-height: 0;
+  }
+
+  .projects__header-inner {
+    gap: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .projects__title {
+    font-size: clamp(3rem, 16vw, 4rem);
+  }
+
+  .projects__title::after {
+    margin-top: 0.8rem;
+    width: 48px;
+  }
+
+  .projects__intro .section-lede {
+    font-size: 0.95rem;
+  }
+
+  .projects__grid {
+    padding-top: 1.5rem;
+  }
+}
+
 /* ---------- rows of 2, zigzagging wide/narrow side each row ---------- */
 
 .projects__grid {

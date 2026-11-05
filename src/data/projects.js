@@ -225,6 +225,7 @@ const SEEDS = [
     poster: '/projects/apertura-aurora-poster.png',
     logo: '/logos/nvoga.png',
     logoBackground: 'rgba(6, 6, 7, 0.82)',
+    videos: ['https://www.youtube.com/watch?v=3fQ59Hyp_D0'],
     images: nvogaPhotos,
   },
   {

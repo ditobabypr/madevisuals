@@ -237,6 +237,50 @@
   }
 }
 
+/* Phones: the title and text were sized for desktop and pushed every
+   image/video far below the fold — tone them down and tighten spacing. */
+@media (max-width: 620px) {
+  .project-detail__banner {
+    height: 120px;
+  }
+
+  .project-detail__body {
+    padding-top: 1.75rem;
+  }
+
+  .project-detail__title {
+    font-size: clamp(1.9rem, 9vw, 2.4rem);
+  }
+
+  .project-detail__intro-main {
+    gap: 0.9rem;
+  }
+
+  .project-detail__text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  .project-detail__intro--split {
+    gap: 1.5rem;
+  }
+
+  .project-detail__intro-image-wrap {
+    margin-inline: auto;
+  }
+
+  .project-detail__video-section,
+  .project-detail__collage,
+  .project-detail__stories {
+    margin-top: 2rem;
+  }
+
+  .project-story__title {
+    font-size: clamp(1.7rem, 8vw, 2.2rem);
+  }
+}
+
 @media (max-width: 480px) {
   .project-detail__reel {
     min-width: 130px;

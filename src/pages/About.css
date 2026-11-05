@@ -142,6 +142,35 @@
   }
 }
 
+/* Phones: the three stats share one even row instead of wrapping into
+   a 2 + 1 layout with stray dividers. */
+@media (max-width: 620px) {
+  .about-hero__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    padding: 1.25rem 0;
+  }
+
+  .about-hero__stat,
+  .about-hero__stat + .about-hero__stat {
+    align-items: center;
+    text-align: center;
+    gap: 0.45rem;
+    padding: 0 0.5rem;
+  }
+
+  .about-hero__stat-number {
+    font-size: clamp(1.9rem, 9vw, 2.6rem);
+  }
+
+  .about-hero__stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    line-height: 1.35;
+  }
+}
+
 /* ---------- philosophy ---------- */
 
 .about-philosophy__list {
