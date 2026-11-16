@@ -66,6 +66,12 @@
   white-space: pre-line;
 }
 
+.project-detail__text strong {
+  font-weight: 800;
+  font-style: italic;
+  color: var(--text);
+}
+
 .project-detail__text-placeholder {
   min-height: 220px;
   border: 1px dashed var(--border);

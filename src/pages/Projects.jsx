@@ -114,7 +114,13 @@ const CCR_VIDEO_URL = '/videos/boda.mp4'
 const CCR_POSTER_URL = '/projects/rooftop-vows-poster.png'
 // True first frame of the file — no dead/black lead-in to skip.
 const CCR_START_AT = 0
-// No logo for this one — the client didn't provide one.
+// Mesaveintiuno wordmark, cropped tight to the letters (≈9.6:1). This tile
+// spans the full row and is very panoramic, and % padding is measured
+// against the WIDTH — any vertical % would swallow the whole height. So
+// padding is horizontal only: the logo is sized by width (~44% of the tile)
+// and object-fit keeps it centred at any tile ratio.
+const CCR_LOGO_URL = '/logos/mesaveintiuno.png'
+const CCR_LOGO_PADDING = '0 28%'
 
 // Format alternates within each pair, and which format leads flips every
 // row — wide-left/narrow-right, then narrow-left/wide-right, and so on —
@@ -281,8 +287,10 @@ const PROJECTS = [
     year: '2023',
     format: 'horizontal',
     video: CCR_VIDEO_URL,
+    logo: CCR_LOGO_URL,
     poster: CCR_POSTER_URL,
     startAt: CCR_START_AT,
+    logoPadding: CCR_LOGO_PADDING,
   },
 ]
 

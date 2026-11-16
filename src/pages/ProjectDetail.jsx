@@ -16,6 +16,13 @@ import './ProjectDetail.css'
 // The banner is shown under a 9px blur, so a file half the screen width
 // looks identical to a full-size one.
 const BANNER_SIZES = '50vw'
+
+// Renders ***text*** as bold + italic inside project descriptions.
+function formatText(text) {
+  return text.split(/\*\*\*(.+?)\*\*\*/g).map((part, i) =>
+    i % 2 === 1 ? <strong key={i}><em>{part}</em></strong> : part,
+  )
+}
 const INTRO_IMAGE_SIZES = '(max-width: 780px) 100vw, 600px'
 const MINI_PHOTO_SIZES = '(max-width: 600px) 100vw, 520px'
 
@@ -65,7 +72,7 @@ export default function ProjectDetail() {
             </Reveal>
             {project.text ? (
               <Reveal as="p" delay={60} className="project-detail__text">
-                {project.text}
+                {formatText(project.text)}
               </Reveal>
             ) : (
               <Reveal as="div" delay={60} className="project-detail__text-placeholder">

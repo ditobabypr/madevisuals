@@ -23,6 +23,18 @@ function usePrefetchPages() {
   }, [])
 }
 
+const SITE_URL = 'https://madevcreative.com'
+
+// index.html ships a canonical pointing at the home page — without this,
+// every project page would tell Google it's a duplicate of the home page.
+function useCanonical(pathname) {
+  useEffect(() => {
+    const url = SITE_URL + pathname
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', url)
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content', url)
+  }, [pathname])
+}
+
 // Only seen when landing directly on a page whose code hasn't arrived yet
 // (in-app navigations keep the transition cover up instead). Fades in after
 // a short delay so fast connections never see it at all.
@@ -38,6 +50,7 @@ function RouteFallback() {
 function AppShell() {
   const location = useLocation()
   const isHome = location.pathname === '/'
+  useCanonical(location.pathname)
 
   return (
     <TransitionProvider>

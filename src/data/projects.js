@@ -230,11 +230,11 @@ const SEEDS = [
   },
   {
     title: 'Boda',
-    text: 'La esencia de una boda no siempre está en los grandes momentos, sino en todo aquello que sucede alrededor de ellos. Una mirada, una conversación, la luz al final de la tarde o un gesto inesperado pueden terminar definiendo el recuerdo de un día entero.\n\nLa producción audiovisual parte de esa observación para construir historias honestas, elegantes y personales, adaptadas a cada celebración y a quienes la protagonizan. Muchas de estas producciones se realizan en colaboración con Mesaveintiuno, compartiendo una misma sensibilidad por la imagen y por la forma de contar cada historia.',
+    text: 'La esencia de una boda no siempre está en los grandes momentos, sino en todo aquello que sucede alrededor de ellos. Una mirada, una conversación, la luz al final de la tarde o un gesto inesperado pueden terminar definiendo el recuerdo de un día entero.\n\n Las producciones de boda se realizan junto a ***Mesaveintiuno***, formando parte de un equipo que comparte una misma sensibilidad por la imagen y la narrativa audiovisual. Una forma de trabajar en la que cada celebración se convierte en una historia propia, contada desde una mirada cinematográfica, natural y personal.',
     format: 'horizontal',
     videos: ['https://www.youtube.com/watch?v=kXcbQy-i_D8'],
     poster: '/projects/rooftop-vows-poster.png',
-    logo: null,
+    logo: '/logos/mesaveintiuno.png',
     images: bodaCoverPhotos,
     reelsCarousel: [
       'https://www.youtube.com/watch?v=cR0v8KmsT7U',
